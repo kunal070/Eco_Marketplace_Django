@@ -1,0 +1,388 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - Sustainable Shopping for a Greener Future{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-gradient-success text-white py-5">
+    <div class="container">
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-leaf text-warning me-3"></i>
+                    {{ featured_message }}
+                </h1>
+                <p class="lead mb-4">
+                    Join thousands of eco-conscious users buying, selling, and trading sustainable products.
+                    Together, we're building a marketplace that cares for our planet.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="#" class="btn btn-warning btn-lg">
+                        <i class="fas fa-shopping-bag me-2"></i>Shop Now
+                    </a>
+                    <a href="#" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-plus-circle me-2"></i>Sell Products
+                    </a>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="row mt-4">
+                    <div class="col-4">
+                        <div class="text-center">
+                            <h4 class="fw-bold text-warning">10K+</h4>
+                            <small>Products</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-center">
+                            <h4 class="fw-bold text-warning">5K+</h4>
+                            <small>Users</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-center">
+                            <h4 class="fw-bold text-warning">99%</h4>
+                            <small>Satisfaction</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image">
+                    <i class="fas fa-globe-americas display-1 text-warning mb-3"></i>
+                    <div class="row justify-content-center">
+                        <div class="col-8">
+                            <div class="bg-white bg-opacity-10 rounded-3 p-4">
+                                <h5 class="mb-3">🌱 Our Impact Today</h5>
+                                <div class="row text-center">
+                                    <div class="col-6 mb-2">
+                                        <strong>2.5 tons</strong><br>
+                                        <small>CO₂ Saved</small>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <strong>1,200</strong><br>
+                                        <small>Items Reused</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-success mb-3">
+                <i class="fas fa-th-large me-3"></i>Shop by Category
+            </h2>
+            <p class="text-muted">Discover eco-friendly products across all categories</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Electronics -->
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100 border-0">
+                    <div class="category-icon mb-3">
+                        <i class="fas fa-laptop fa-3x text-primary"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Electronics</h6>
+                    <p class="text-muted small mb-3">Refurbished & eco gadgets</p>
+                    <a href="#" class="btn btn-outline-primary btn-sm">Browse</a>
+                </div>
+            </div>
+
+            <!-- Fashion -->
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100 border-0">
+                    <div class="category-icon mb-3">
+                        <i class="fas fa-tshirt fa-3x text-success"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Fashion</h6>
+                    <p class="text-muted small mb-3">Sustainable clothing</p>
+                    <a href="#" class="btn btn-outline-success btn-sm">Browse</a>
+                </div>
+            </div>
+
+            <!-- Home & Garden -->
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100 border-0">
+                    <div class="category-icon mb-3">
+                        <i class="fas fa-home fa-3x text-warning"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Home & Garden</h6>
+                    <p class="text-muted small mb-3">Eco home solutions</p>
+                    <a href="#" class="btn btn-outline-warning btn-sm">Browse</a>
+                </div>
+            </div>
+
+            <!-- Green Energy -->
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100 border-0">
+                    <div class="category-icon mb-3">
+                        <i class="fas fa-solar-panel fa-3x text-info"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Green Energy</h6>
+                    <p class="text-muted small mb-3">Renewable solutions</p>
+                    <a href="#" class="btn btn-outline-info btn-sm">Browse</a>
+                </div>
+            </div>
+
+            <!-- Books -->
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100 border-0">
+                    <div class="category-icon mb-3">
+                        <i class="fas fa-book fa-3x text-secondary"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Books</h6>
+                    <p class="text-muted small mb-3">Environmental education</p>
+                    <a href="#" class="btn btn-outline-secondary btn-sm">Browse</a>
+                </div>
+            </div>
+
+            <!-- DIY & Crafts -->
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="category-card text-center p-4 bg-white rounded-3 shadow-sm h-100 border-0">
+                    <div class="category-icon mb-3">
+                        <i class="fas fa-tools fa-3x text-dark"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">DIY & Crafts</h6>
+                    <p class="text-muted small mb-3">Upcycling materials</p>
+                    <a href="#" class="btn btn-outline-dark btn-sm">Browse</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-success mb-3">
+                <i class="fas fa-star me-3"></i>Featured Products
+            </h2>
+            <p class="text-muted">Hand-picked sustainable products from our community</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Sample Product Cards (These will be dynamic when products app is ready) -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="position-relative">
+                        <div class="bg-success text-white p-4 d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-laptop fa-4x"></i>
+                        </div>
+                        <span class="badge bg-warning position-absolute top-0 start-0 m-2">Featured</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold">Refurbished MacBook Air</h6>
+                        <p class="card-text text-muted small">Like new condition, 1-year warranty</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="text-success fw-bold mb-0">$899</h5>
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="#" class="btn btn-success w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="position-relative">
+                        <div class="bg-info text-white p-4 d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-solar-panel fa-4x"></i>
+                        </div>
+                        <span class="badge bg-warning position-absolute top-0 start-0 m-2">Featured</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold">Solar Panel Kit</h6>
+                        <p class="card-text text-muted small">100W portable solar panel</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="text-success fw-bold mb-0">$299</h5>
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="#" class="btn btn-success w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="position-relative">
+                        <div class="bg-secondary text-white p-4 d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-tshirt fa-4x"></i>
+                        </div>
+                        <span class="badge bg-warning position-absolute top-0 start-0 m-2">Featured</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold">Organic Cotton T-Shirt</h6>
+                        <p class="card-text text-muted small">100% organic, fair trade certified</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="text-success fw-bold mb-0">$25</h5>
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="#" class="btn btn-success w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="position-relative">
+                        <div class="bg-warning text-white p-4 d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-seedling fa-4x"></i>
+                        </div>
+                        <span class="badge bg-warning position-absolute top-0 start-0 m-2">Featured</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold">Composting Kit</h6>
+                        <p class="card-text text-muted small">Complete home composting solution</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="text-success fw-bold mb-0">$89</h5>
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="#" class="btn btn-success w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="#" class="btn btn-outline-success btn-lg">
+                <i class="fas fa-th me-2"></i>View All Products
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Green Tips Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-success mb-3">
+                <i class="fas fa-lightbulb me-3"></i>Daily Green Tips
+            </h2>
+            <p class="text-muted">Small actions, big impact for our planet</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="tip-card bg-white p-4 rounded-3 shadow-sm h-100">
+                    <div class="tip-icon text-success mb-3">
+                        <i class="fas fa-recycle fa-3x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Reduce, Reuse, Recycle</h5>
+                    <p class="text-muted">Before buying new, consider if you can repurpose something you already have. Our marketplace helps you find pre-loved items that are perfect for your needs.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="tip-card bg-white p-4 rounded-3 shadow-sm h-100">
+                    <div class="tip-icon text-info mb-3">
+                        <i class="fas fa-water fa-3x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Save Water Daily</h5>
+                    <p class="text-muted">Simple changes like shorter showers and fixing leaks can save thousands of gallons per year. Look for water-saving devices in our home category.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="tip-card bg-white p-4 rounded-3 shadow-sm h-100">
+                    <div class="tip-icon text-warning mb-3">
+                        <i class="fas fa-sun fa-3x"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Use Renewable Energy</h5>
+                    <p class="text-muted">Solar panels and energy-efficient appliances reduce your carbon footprint. Browse our green energy category for sustainable solutions.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-5 bg-success text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="fw-bold mb-3">
+                    <i class="fas fa-users me-3"></i>Join Our Eco-Community Today!
+                </h3>
+                <p class="mb-0 lead">
+                    Start your sustainable journey with us. Buy eco-friendly products,
+                    sell your unused items, and connect with like-minded environmental enthusiasts.
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <a href="#" class="btn btn-warning btn-lg me-3">
+                    <i class="fas fa-user-plus me-2"></i>Join Now
+                </a>
+                <a href="#" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-info-circle me-2"></i>Learn More
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+// Add some interactivity to category cards
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryCards = document.querySelectorAll('.category-card');
+
+    categoryCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+});
+</script>
+{% endblock %}

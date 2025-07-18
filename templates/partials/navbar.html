@@ -1,0 +1,110 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+    <div class="container">
+        <!-- Logo/Brand -->
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'core:home' %}">
+            <i class="fas fa-leaf me-2 text-light"></i>
+            <span class="fw-bold">EcoMarket</span>
+        </a>
+
+        <!-- Mobile Toggle Button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navigation Items -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Search Bar (Center) -->
+            <div class="mx-auto d-lg-flex d-none">
+                <form class="d-flex" method="GET" action="#" style="width: 400px;">
+                    <input class="form-control rounded-pill" type="search" placeholder="Search eco-friendly products..."
+                           aria-label="Search" name="q" autocomplete="off" spellcheck="false">
+                </form>
+            </div>
+
+            <!-- Right Side Navigation -->
+            <ul class="navbar-nav ms-auto">
+                <!-- Products Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-shopping-bag me-1"></i> Products
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+                        <li><a class="dropdown-item" href="#">All Products</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-laptop me-2"></i> Electronics</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-tshirt me-2"></i> Sustainable Fashion</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-home me-2"></i> Home & Garden</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-solar-panel me-2"></i> Green Energy</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-book me-2"></i> Books & Media</a></li>
+                    </ul>
+                </li>
+
+                <!-- Blog -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:about' %}">
+                        <i class="fas fa-leaf me-1"></i> Green Tips
+                    </a>
+                </li>
+
+                <!-- About -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:about' %}">About</a>
+                </li>
+
+                <!-- Contact -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:contact' %}">Contact</a>
+                </li>
+
+                <!-- User Authentication -->
+                {% comment %}
+                <!-- This will be uncommented when authentication is ready -->
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-1"></i> {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-plus me-2"></i> Sell Product</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-box me-2"></i> My Products</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i> Messages</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-bar me-2"></i> Dashboard</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light btn-sm ms-2" href="#">
+                            <i class="fas fa-user-plus me-1"></i> Register
+                        </a>
+                    </li>
+                {% endif %}
+                {% endcomment %}
+
+                <!-- Temporary Login/Register (will be replaced with actual links) -->
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-sign-in-alt me-1"></i> Login
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-warning text-dark fw-bold px-3 py-2 ms-2 rounded-pill" href="#">
+                        <i class="fas fa-user-plus me-1"></i> Register
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,39 @@
+# Core Django Framework
+Django==4.2.7
+
+# Image Processing (for product photos, user avatars)
+#Pillow==10.0.1
+
+# Forms & UI Enhancement
+# django-crispy-forms==2.0
+crispy-bootstrap5==0.7
+django-bootstrap5==23.3
+django-widget-tweaks==1.5.0
+
+# Configuration Management
+python-decouple==3.8
+
+# Development Tools
+django-extensions==3.2.3
+django-debug-toolbar==4.2.0
+
+# Search & Filtering (Optional - for advanced search)
+django-filter==23.3
+
+# File Handling & Validation
+django-cleanup==8.0.0
+
+# Security Enhancements
+django-cors-headers==4.3.1
+
+# Database (if you want to use PostgreSQL later)
+# psycopg2-binary==2.9.7
+
+# Email Backend (for production)
+# django-environ==0.11.2
+
+# Testing
+coverage==7.3.2
+
+# Static Files Handling (for production)
+whitenoise==6.6.0

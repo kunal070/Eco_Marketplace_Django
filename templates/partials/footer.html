@@ -1,0 +1,233 @@
+{% load static %}
+
+<footer class="bg-dark text-light mt-5">
+    <!-- Main Footer Content -->
+    <div class="container py-5">
+        <div class="row">
+            <!-- Company Info -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h5 class="text-success mb-3">
+                    <i class="fas fa-leaf me-2"></i>EcoMarket
+                </h5>
+                <p class="text-muted small">
+                    Building a sustainable future through eco-friendly marketplace.
+                    Buy, sell, and discover products that make a positive impact on our planet.
+                </p>
+                <div class="d-flex">
+                    <a href="#" class="text-success me-3" title="Facebook">
+                        <i class="fab fa-facebook fa-lg"></i>
+                    </a>
+                    <a href="#" class="text-success me-3" title="Twitter">
+                        <i class="fab fa-twitter fa-lg"></i>
+                    </a>
+                    <a href="#" class="text-success me-3" title="Instagram">
+                        <i class="fab fa-instagram fa-lg"></i>
+                    </a>
+                    <a href="#" class="text-success me-3" title="LinkedIn">
+                        <i class="fab fa-linkedin fa-lg"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6 class="text-success mb-3">Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="{% url 'core:home' %}" class="text-muted text-decoration-none">
+                            <i class="fas fa-home fa-sm me-2"></i>Home
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'core:about' %}" class="text-muted text-decoration-none">
+                            <i class="fas fa-info-circle fa-sm me-2"></i>About Us
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'core:contact' %}" class="text-muted text-decoration-none">
+                            <i class="fas fa-envelope fa-sm me-2"></i>Contact
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-blog fa-sm me-2"></i>Green Blog
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-question-circle fa-sm me-2"></i>FAQ
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Categories -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6 class="text-success mb-3">Categories</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-laptop fa-sm me-2"></i>Electronics
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-tshirt fa-sm me-2"></i>Fashion
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-home fa-sm me-2"></i>Home & Garden
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-solar-panel fa-sm me-2"></i>Green Energy
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-book fa-sm me-2"></i>Books & Media
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Support -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6 class="text-success mb-3">Support</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-headset fa-sm me-2"></i>Help Center
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-shield-alt fa-sm me-2"></i>Safety Tips
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-file-contract fa-sm me-2"></i>Terms of Service
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-user-secret fa-sm me-2"></i>Privacy Policy
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="#" class="text-muted text-decoration-none">
+                            <i class="fas fa-recycle fa-sm me-2"></i>Sustainability
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Newsletter & Contact -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h6 class="text-success mb-3">Stay Green, Stay Updated</h6>
+                <p class="text-muted small mb-3">
+                    Subscribe to our newsletter for eco-friendly tips and latest sustainable products.
+                </p>
+
+                <!-- Newsletter Signup -->
+                <form class="mb-3">
+                    <div class="input-group">
+                        <input type="email" class="form-control form-control-sm"
+                               placeholder="Your email address" required>
+                        <button class="btn btn-success btn-sm" type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Contact Info -->
+                <div class="text-muted small">
+                    <div class="mb-2">
+                        <i class="fas fa-map-marker-alt me-2 text-success"></i>
+                        123 Green Street, Eco City, EC 12345
+                    </div>
+                    <div class="mb-2">
+                        <i class="fas fa-phone me-2 text-success"></i>
+                        <a href="tel:+1234567890" class="text-muted text-decoration-none">
+                            +1 (234) 567-8900
+                        </a>
+                    </div>
+                    <div class="mb-2">
+                        <i class="fas fa-envelope me-2 text-success"></i>
+                        <a href="mailto:info@ecomarket.com" class="text-muted text-decoration-none">
+                            info@ecomarket.com
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Environmental Impact Bar -->
+    <div class="bg-success py-3">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3 col-6 mb-2 mb-md-0">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-recycle fa-lg me-2"></i>
+                        <div>
+                            <div class="fw-bold">50K+</div>
+                            <small>Items Recycled</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-2 mb-md-0">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-tree fa-lg me-2"></i>
+                        <div>
+                            <div class="fw-bold">1000+</div>
+                            <small>Trees Saved</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-2 mb-md-0">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-users fa-lg me-2"></i>
+                        <div>
+                            <div class="fw-bold">25K+</div>
+                            <small>Eco Warriors</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 mb-2 mb-md-0">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="fas fa-leaf fa-lg me-2"></i>
+                        <div>
+                            <div class="fw-bold">100K+</div>
+                            <small>CO₂ Reduced (kg)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="bg-secondary py-3">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-muted small">
+                        © 2025 EcoMarket. All rights reserved.
+                        <span class="text-success">Made with 💚 for the Planet</span>
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0 text-muted small">
+                        <i class="fas fa-code me-1"></i>
+                        Powered by Django & Bootstrap
+                        <i class="fas fa-heart text-danger ms-1"></i>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

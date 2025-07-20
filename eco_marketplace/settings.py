@@ -172,3 +172,6 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
 # Security Settings (for development)
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Login redirect
+LOGIN_REDIRECT_URL = '/auth/profile/'  # or use reverse('authentication:profile')

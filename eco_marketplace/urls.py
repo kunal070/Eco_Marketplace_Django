@@ -8,7 +8,7 @@ urlpatterns = [
 
     # App URLs - Will be uncommented as we create each app's URLs
     path('', include('apps.core.urls')),                    # Homepage, about, contact
-    # path('auth/', include('apps.authentication.urls')),     # Login, register, profile
+    path('auth/', include('apps.authentication.urls')),     # Login, register, profile
     # path('products/', include('apps.products.urls')),       # Products, categories, search
     # path('messages/', include('apps.messaging.urls')),      # User messaging
     # path('reviews/', include('apps.reviews.urls')),         # Reviews and ratings

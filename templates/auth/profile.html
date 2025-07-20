@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% block title %}Your Profile - Eco-Friendly Marketplace{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-success text-white text-center">
+          <h4>Your Profile</h4>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3 align-items-center">
+            <div class="col-md-3 text-center">
+              {% if user.userprofile.profile_picture %}
+                <img src="{{ user.userprofile.profile_picture.url }}" class="img-fluid rounded-circle" style="max-height: 120px;" alt="Profile Picture">
+              {% else %}
+                <img src="{% static 'images/default-profile.png' %}" class="img-fluid rounded-circle" style="max-height: 120px;" alt="Default Profile">
+              {% endif %}
+            </div>
+            <div class="col-md-9">
+              <h5 class="mb-1">{{ user.username }}</h5>
+              <p class="mb-0"><strong>Email:</strong> {{ user.email }}</p>
+              <p class="mb-0"><strong>Verified:</strong>
+                {% if user.userprofile.is_verified %}
+                  <span class="badge bg-success">Yes</span>
+                {% else %}
+                  <span class="badge bg-secondary">No</span>
+                {% endif %}
+              </p>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Location:</strong> {{ user.userprofile.location|default:"Not specified" }}</p>
+              <p><strong>Phone Number:</strong> {{ user.userprofile.phone_number|default:"Not specified" }}</p>
+              <p><strong>Phone Verified:</strong>
+                  {% if user.userprofile.is_phone_verified %}
+                    <span class="badge bg-success">Yes</span>
+                  {% else %}
+                    <span class="badge bg-secondary">No</span>
+                    <a href="{% url 'authentication:send_phone_code' %}" class="btn btn-sm btn-outline-warning ms-2">Verify Now</a>
+                  {% endif %}
+                </p>
+              <p><strong>Preferences:</strong>
+                {{ user.userprofile.get_preferences_display|default:"Not specified" }}
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Bio:</strong></p>
+              <p>{{ user.userprofile.bio|default:"No bio provided." }}</p>
+            </div>
+          </div>
+            <p class="text-end mt-3">
+              <a href="{% url 'authentication:edit_profile' %}" class="btn btn-outline-success btn-sm">
+                Edit Profile
+              </a>
+            </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

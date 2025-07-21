@@ -49,13 +49,18 @@
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="#" class="text-muted text-decoration-none">
+                        <a href="{% url 'blog:blog_list' %}" class="text-muted text-decoration-none">
                             <i class="fas fa-blog fa-sm me-2"></i>Green Blog
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="#" class="text-muted text-decoration-none">
+                        <a href="{% url 'blog:faq' %}" class="text-muted text-decoration-none">
                             <i class="fas fa-question-circle fa-sm me-2"></i>FAQ
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'blog:green_tips' %}" class="text-muted text-decoration-none">
+                            <i class="fas fa-question-circle fa-sm me-2"></i>Green Tips
                         </a>
                     </li>
                 </ul>

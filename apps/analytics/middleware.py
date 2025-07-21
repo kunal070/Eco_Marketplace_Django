@@ -14,6 +14,7 @@ class VisitTrackingMiddleware:
             VisitLog.objects.create(
                 user=request.user,
                 page=request.path,
+                path=request.path,
                 duration=duration
             )
         return response

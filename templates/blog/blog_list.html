@@ -1,18 +1,36 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
 {% block content %}
-<div class="container mt-4">
-    <h2>Blog Posts</h2>
-    <hr>
-    {% for post in posts %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <h4 class="card-title"><a href="{% url 'blog:blog_detail' post.pk %}">{{ post.title }}</a></h4>
-                <p class="card-text">{{ post.excerpt|truncatewords:30 }}</p>
-                <small>Published on {{ post.created_at }}</small>
-            </div>
+<div class="container py-5">
+    <h2 class="mb-4 text-success text-center">🌿 Latest Blog Posts</h2>
+
+    {% if blogs %}
+        <div class="row">
+            {% for blog in blogs %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm border-0">
+                        {% if blog.image %}
+                            <img src="{{ blog.image.url }}" class="card-img-top" alt="{{ blog.title }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/600x400?text=Eco+Market+Blog" class="card-img-top" alt="Placeholder">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ blog.title }}</h5>
+                            <p class="card-text text-muted" style="font-size: 14px;">
+                                By {{ blog.author|default:"Admin" }} • {{ blog.created_at|date:"F d, Y" }}
+                            </p>
+                            <p class="card-text">{{ blog.content|truncatechars:120 }}</p>
+                            <a href="{% url 'blog:blog_detail' blog.pk %}" class="btn btn-outline-success btn-sm mt-2">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>No blog posts available.</p>
-    {% endfor %}
+    {% else %}
+        <div class="text-center p-5 bg-light rounded shadow-sm">
+            <h4 class="text-muted">📭 No blog posts found.</h4>
+            <p class="text-secondary">We’re working on bringing you the latest eco-friendly tips, news, and stories. Please check back soon!</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

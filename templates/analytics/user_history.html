@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Your Browsing & Search History</h2>
+    <hr>
+    <h4>Page Visits</h4>
+    <ul>
+        {% for log in visit_logs %}
+            <li>{{ log.path }} at {{ log.timestamp }}</li>
+        {% endfor %}
+    </ul>
+
+    <h4>Search History</h4>
+    <ul>
+        {% for search in searches %}
+            <li>"{{ search.query }}" on {{ search.timestamp }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

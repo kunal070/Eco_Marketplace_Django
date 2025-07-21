@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Green Tips for Sustainable Living</h2>
+    <hr>
+    {% for tip in tips %}
+        <div class="alert alert-success">
+            <strong>{{ tip.title }}:</strong> {{ tip.description }}
+        </div>
+    {% empty %}
+        <p>No tips available.</p>
+    {% endfor %}
+</div>
+{% endblock %}

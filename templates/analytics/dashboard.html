@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>User Analytics Dashboard</h2>
+    <hr>
+    <h4>Most Visited Pages</h4>
+    <ul>
+        {% for visit in visits %}
+            <li>{{ visit.path }} - {{ visit.count }} visits</li>
+        {% endfor %}
+    </ul>
+
+    <h4>Popular Products</h4>
+    <ul>
+        {% for product in popular_products %}
+            <li>{{ product.name }} - {{ product.view_count }} views</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -13,7 +13,8 @@ urlpatterns = [
     # path('messages/', include('apps.messaging.urls')),      # User messaging
     # path('reviews/', include('apps.reviews.urls')),         # Reviews and ratings
     # path('analytics/', include('apps.analytics.urls')),     # User history, dashboard
-    # path('blog/', include('apps.blog.urls')),              # Blog posts, green tips
+    path('analytics/', include('apps.analytics.urls', namespace='analytics')),
+    path('blog/', include('apps.blog.urls')),              # Blog posts, green tips
 ]
 
 # Serve media files during development

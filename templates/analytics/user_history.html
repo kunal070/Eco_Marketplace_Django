@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Your Search History</h2>
+    <ul class="list-group">
+        {% for history in search_history %}
+        <li class="list-group-item">{{ history.query }} ({{ history.timestamp|date:"M d, Y H:i" }})</li>
+        {% empty %}
+        <li class="list-group-item">No search history found.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

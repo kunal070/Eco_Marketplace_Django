@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Analytics Overview</h2>
+    <p class="text-center">Track your activity and explore insights about your browsing, search, and product engagement history.</p>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">📊 User Dashboard</h5>
+                    <p class="card-text">View overall user activity, visits, and recent actions.</p>
+                    <a href="{% url 'analytics:dashboard' %}" class="btn btn-success">Go to Dashboard</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">🔍 Search History</h5>
+                    <p class="card-text">See your recent searches and explore past queries.</p>
+                    <a href="{% url 'analytics:search_history' %}" class="btn btn-success">View History</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">🔥 Popular Products</h5>
+                    <p class="card-text">Check out what's trending on EcoMarket.</p>
+                    <a href="{% url 'analytics:popular_products' %}" class="btn btn-success">See Popular Items</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

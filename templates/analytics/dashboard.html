@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">User Analytics Dashboard</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 mb-4 bg-white rounded">
+                <h5>Total Visits</h5>
+                <p>{{ total_visits }}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 mb-4 bg-white rounded">
+                <h5>Most Visited Page</h5>
+                <p>{{ most_visited_page }}</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 mb-4 bg-white rounded">
+                <h5>Recent Activity</h5>
+                <ul>
+                    {% for activity in recent_activities %}
+                        <li>{{ activity.activity_type }} on {{ activity.timestamp }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

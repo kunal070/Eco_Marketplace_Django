@@ -14,7 +14,7 @@ urlpatterns = [
     # path('reviews/', include('apps.reviews.urls')),         # Reviews and ratings
     # path('analytics/', include('apps.analytics.urls')),     # User history, dashboard
     path('analytics/', include('apps.analytics.urls', namespace='analytics')),
-    path('blog/', include('apps.blog.urls')),              # Blog posts, green tips
+    path('blog/', include('apps.blog.urls')), # Blog posts, green tips
 ]
 
 # Serve media files during development

@@ -1,14 +1,36 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
+{% block title %}Green Tips{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
-    <h2>Green Tips for Sustainable Living</h2>
-    <hr>
-    {% for tip in tips %}
-        <div class="alert alert-success">
-            <strong>{{ tip.title }}:</strong> {{ tip.description }}
+<div class="container py-5">
+    <h2 class="text-center mb-4 text-success" style="font-size: 2.5rem;">
+        🌿 Green Tips
+    </h2>
+
+    {% if tips %}
+        <div class="row">
+            {% for tip in tips %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm h-100 border-success">
+                        <div class="card-body">
+                            <h5 class="card-title text-success">
+                                🌱 {{ tip.title }}
+                            </h5>
+                            <p class="card-text">{{ tip.description }}</p>
+                        </div>
+                        <div class="card-footer bg-transparent text-muted small">
+                            Posted on: {{ tip.posted_on|date:"F d, Y" }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>No tips available.</p>
-    {% endfor %}
+    {% else %}
+        <div class="alert alert-info text-center shadow-sm">
+            <h5>🚫 No tips available right now.</h5>
+            <p>We’re working on bringing you more eco-friendly advice. Please check back soon!</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

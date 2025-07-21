@@ -1,20 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-4">
-    <h2>Your Browsing & Search History</h2>
-    <hr>
-    <h4>Page Visits</h4>
-    <ul>
-        {% for log in visit_logs %}
-            <li>{{ log.path }} at {{ log.timestamp }}</li>
-        {% endfor %}
-    </ul>
+    <h2 class="text-success font-weight-bold text-center mt-4 mb-3">
+    <i class="fas fa-history"></i> Your Browsing & Search History
+    </h2>
 
-    <h4>Search History</h4>
-    <ul>
-        {% for search in searches %}
-            <li>"{{ search.query }}" on {{ search.timestamp }}</li>
-        {% endfor %}
-    </ul>
+    <hr>
+
+    <h4>🧭 Page Visits</h4>
+    {% if visit_logs %}
+        <ul>
+            {% for log in visit_logs %}
+                <li>Visited <strong>{{ log.path }}</strong> on {{ log.timestamp|date:"F j, Y, g:i a" }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No page visits logged yet.</p>
+    {% endif %}
+
+    <h4>🔍 Search History</h4>
+    {% if searches %}
+        <ul>
+            {% for search in searches %}
+                <li>Searched for <strong>"{{ search.query }}"</strong> on {{ search.timestamp|date:"F j, Y, g:i a" }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No search history found.</p>
+    {% endif %}
 </div>
 {% endblock %}

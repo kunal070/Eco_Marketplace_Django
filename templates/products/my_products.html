@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ page_title }}</h2>
+<div class="row">
+  {% for product in products %}
+    <div class="col-md-4 mb-4">
+      {% include 'partials/product_card.html' with product=product %}
+    </div>
+  {% empty %}
+    <div class="col-12">You have not listed any products yet.</div>
+  {% endfor %}
+</div>
+{% include 'partials/pagination.html' %}
+{% endblock %} 

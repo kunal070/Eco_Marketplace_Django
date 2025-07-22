@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - Send New Message{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'messaging:inbox' %}" class="text-success">
+                            <i class="fas fa-inbox me-1"></i>Messages
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">Compose</li>
+                </ol>
+            </nav>
+            <h1 class="fw-bold text-success mb-2">
+                <i class="fas fa-edit me-3"></i>Compose New Message
+            </h1>
+            <p class="text-muted">Send a message to another user</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'messaging:inbox' %}" class="btn btn-outline-success">
+                <i class="fas fa-arrow-left me-2"></i>Back to Inbox
+            </a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-envelope me-2"></i>New Message
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Recipient -->
+                        <div class="mb-3">
+                            <label for="{{ form.recipient.id_for_label }}" class="form-label">
+                                <i class="fas fa-user me-2"></i>{{ form.recipient.label }}
+                            </label>
+                            {{ form.recipient }}
+                            {% if form.recipient.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.recipient.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Subject -->
+                        <div class="mb-3">
+                            <label for="{{ form.subject.id_for_label }}" class="form-label">
+                                <i class="fas fa-tag me-2"></i>{{ form.subject.label }}
+                            </label>
+                            {{ form.subject }}
+                            {% if form.subject.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.subject.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Message Content -->
+                        <div class="mb-4">
+                            <label for="{{ form.message_content.id_for_label }}" class="form-label">
+                                <i class="fas fa-comment me-2"></i>{{ form.message_content.label }}
+                            </label>
+                            {{ form.message_content }}
+                            {% if form.message_content.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.message_content.errors }}
+                                </div>
+                            {% endif %}
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Be clear and respectful in your message. Include relevant details about your inquiry.
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'messaging:inbox' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-paper-plane me-2"></i>Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tips Card -->
+            <div class="card mt-4 border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>Messaging Tips
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Be specific about what you're asking or offering
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Include relevant product details if discussing an item
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Be respectful and professional in your communication
+                        </li>
+                        <li class="mb-0">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Respond promptly to maintain good relationships
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messageTextarea = document.querySelector('#id_message_content');
+    const subjectInput = document.querySelector('#id_subject');
+    
+    // Auto-resize message textarea
+    if (messageTextarea) {
+        messageTextarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    }
+    
+    // Character counter for subject
+    if (subjectInput) {
+        const maxLength = 200;
+        const counter = document.createElement('div');
+        counter.className = 'form-text text-end';
+        counter.innerHTML = `<span id="subject-counter">0</span>/${maxLength} characters`;
+        subjectInput.parentNode.appendChild(counter);
+        
+        const counterSpan = document.getElementById('subject-counter');
+        
+        subjectInput.addEventListener('input', function() {
+            const length = this.value.length;
+            counterSpan.textContent = length;
+            
+            if (length > maxLength * 0.9) {
+                counterSpan.className = 'text-warning';
+            } else if (length > maxLength * 0.8) {
+                counterSpan.className = 'text-info';
+            } else {
+                counterSpan.className = '';
+            }
+        });
+    }
+    
+    // Form validation
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const recipient = document.querySelector('#id_recipient').value;
+            const subject = document.querySelector('#id_subject').value.trim();
+            const message = document.querySelector('#id_message_content').value.trim();
+            
+            if (!recipient) {
+                e.preventDefault();
+                alert('Please select a recipient.');
+                return;
+            }
+            
+            if (!subject) {
+                e.preventDefault();
+                alert('Please enter a subject.');
+                return;
+            }
+            
+            if (!message) {
+                e.preventDefault();
+                alert('Please enter a message.');
+                return;
+            }
+            
+            if (message.length < 10) {
+                e.preventDefault();
+                alert('Please enter a more detailed message (at least 10 characters).');
+                return;
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+
+<style>
+#id_message_content {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    ime-mode: auto !important;
+}
+</style>

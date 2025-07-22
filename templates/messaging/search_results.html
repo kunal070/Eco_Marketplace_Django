@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Results - Messages{% endblock %}
+
+{% block extra_css %}
+<style>
+    .search-results {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .conversation-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #28a745;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .conversation-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .unread-indicator {
+        width: 8px;
+        height: 8px;
+        background-color: #28a745;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+    }
+    
+    .search-highlight {
+        background-color: #fff3cd;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'messaging:inbox' %}" class="text-success">
+                            <i class="fas fa-inbox me-1"></i>Messages
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">Search Results</li>
+                </ol>
+            </nav>
+
+            <!-- Search Results Header -->
+            <div class="search-results mb-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="fw-bold mb-2">
+                            <i class="fas fa-search me-3 text-success"></i>
+                            Search Results
+                        </h2>
+                        <p class="text-muted mb-0">
+                            {% if query %}
+                                Found {{ conversations|length }} conversation{{ conversations|length|pluralize }} for "<span class="search-highlight">{{ query }}</span>"
+                            {% else %}
+                                Showing all conversations
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <a href="{% url 'messaging:inbox' %}" class="btn btn-outline-success">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Back to Inbox
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="GET" action="{% url 'messaging:search' %}" class="row g-3">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <input type="text" 
+                                       name="q" 
+                                       value="{{ query }}" 
+                                       class="form-control" 
+                                       placeholder="Search conversations by subject or participant name...">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="fas fa-search me-2"></i>
+                                Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Results -->
+            {% if conversations %}
+                <div class="conversations-list">
+                    {% for conversation in conversations %}
+                        <div class="conversation-card">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <div class="d-flex align-items-center mb-2">
+                                        {% if conversation.has_unread %}
+                                            <span class="unread-indicator"></span>
+                                        {% endif %}
+                                        <h5 class="fw-bold mb-0">
+                                            <a href="{% url 'messaging:conversation' conversation.pk %}" 
+                                               class="text-decoration-none text-dark">
+                                                {{ conversation.subject }}
+                                            </a>
+                                        </h5>
+                                    </div>
+                                    
+                                    <div class="row text-muted small">
+                                        <div class="col-md-6">
+                                            <i class="fas fa-users me-1"></i>
+                                            {% for participant in conversation.participants.all %}
+                                                {% if participant != request.user %}
+                                                    <span class="badge bg-light text-dark me-1">
+                                                        {{ participant.username }}
+                                                    </span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <i class="fas fa-calendar me-1"></i>
+                                            {{ conversation.updated_at|timesince }} ago
+                                        </div>
+                                    </div>
+                                    
+                                    {% if conversation.messages.exists %}
+                                        <div class="mt-2">
+                                            <small class="text-muted">
+                                                <i class="fas fa-comment me-1"></i>
+                                                {{ conversation.messages.count }} message{{ conversation.messages.count|pluralize }}
+                                            </small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-4 text-md-end">
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'messaging:conversation' conversation.pk %}" 
+                                           class="btn btn-outline-success btn-sm">
+                                            <i class="fas fa-eye me-1"></i>
+                                            View
+                                        </a>
+                                        <a href="{% url 'messaging:delete_conversation' conversation.pk %}" 
+                                           class="btn btn-outline-danger btn-sm">
+                                            <i class="fas fa-trash me-1"></i>
+                                            Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- No Results -->
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-search text-muted" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-muted mb-3">No conversations found</h4>
+                    <p class="text-muted mb-4">
+                        {% if query %}
+                            No conversations match your search for "{{ query }}". Try different keywords or check your spelling.
+                        {% else %}
+                            You don't have any conversations yet.
+                        {% endif %}
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'messaging:inbox' %}" class="btn btn-outline-success">
+                            <i class="fas fa-inbox me-2"></i>
+                            Back to Inbox
+                        </a>
+                        <a href="{% url 'messaging:compose' %}" class="btn btn-success">
+                            <i class="fas fa-plus me-2"></i>
+                            Start New Conversation
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Search Tips -->
+            {% if query %}
+                <div class="mt-4">
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            Search Tips
+                        </h6>
+                        <ul class="mb-0">
+                            <li>Search by conversation subject or participant username</li>
+                            <li>Try using partial names or keywords</li>
+                            <li>Search is case-insensitive</li>
+                            <li>Use quotes for exact phrase matching</li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-focus search input
+    document.querySelector('input[name="q"]').focus();
+    
+    // Highlight search terms in results
+    function highlightSearchTerms() {
+        const query = '{{ query }}';
+        if (query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            const elements = document.querySelectorAll('.conversation-card h5, .conversation-card .badge');
+            
+            elements.forEach(element => {
+                element.innerHTML = element.innerHTML.replace(regex, '<span class="search-highlight">$1</span>');
+            });
+        }
+    }
+    
+    // Run highlighting after page loads
+    document.addEventListener('DOMContentLoaded', highlightSearchTerms);
+</script>
+{% endblock %} 

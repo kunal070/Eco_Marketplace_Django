@@ -52,7 +52,7 @@
 
 /* Category Cards */
 .category-card {
-    transition: all 0.3s ease;
+    /* transition: none !important; */
     border: 2px solid transparent;
     cursor: pointer;
     position: relative;
@@ -75,22 +75,22 @@
 }
 
 .category-card:hover {
-    transform: translateY(-8px) scale(1.02);
+    /* transform: translateY(-8px) scale(1.02); */
     border-color: var(--primary-green);
-    box-shadow: 0 15px 30px rgba(40, 167, 69, 0.2);
+    /* box-shadow: 0 15px 30px rgba(40, 167, 69, 0.2); */
 }
 
 .category-icon {
-    transition: all 0.3s ease;
+    /* transition: none !important; */
 }
 
 .category-card:hover .category-icon i {
-    transform: scale(1.2) rotate(10deg);
+    /* transform: scale(1.2) rotate(10deg); */
 }
 
 /* Featured Products */
 .card {
-    transition: all 0.3s ease;
+    /* transition: none !important; */
     position: relative;
     overflow: hidden;
 }
@@ -129,37 +129,37 @@
 }
 
 .card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    /* transform: translateY(-10px); */
+    /* box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); */
 }
 
 .card .badge {
-    animation: pulse 2s infinite;
+    /* animation: pulse 2s infinite; */
 }
 
 @keyframes pulse {
     0% {
-        transform: scale(1);
+        /* transform: scale(1); */
     }
     50% {
-        transform: scale(1.05);
+        /* transform: scale(1.05); */
     }
     100% {
-        transform: scale(1);
+        /* transform: scale(1); */
     }
 }
 
 /* Green Tips Section */
 .tip-card {
-    transition: all 0.3s ease;
+    /* transition: none !important; */
     border: 2px solid transparent;
     position: relative;
 }
 
 .tip-card:hover {
-    transform: translateY(-5px);
+    /* transform: translateY(-5px); */
     border-color: var(--light-green);
-    box-shadow: 0 15px 30px rgba(40, 167, 69, 0.1);
+    /* box-shadow: 0 15px 30px rgba(40, 167, 69, 0.1); */
 }
 
 .tip-icon {
@@ -181,9 +181,9 @@
 }
 
 .tip-card:hover .tip-icon::after {
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle, rgba(40, 167, 69, 0.15) 0%, transparent 70%);
+    /* width: 100px; */
+    /* height: 100px; */
+    /* background: radial-gradient(circle, rgba(40, 167, 69, 0.15) 0%, transparent 70%); */
 }
 
 /* Stats Animation */
@@ -216,36 +216,35 @@
 
 /* Environmental Impact Counter */
 .impact-counter {
+    /* transition: none !important; */
     background: linear-gradient(135deg, var(--secondary-green), var(--primary-green));
     color: white;
     border-radius: 15px;
-    transition: all 0.3s ease;
 }
 
 .impact-counter:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3);
+    /* transform: scale(1.05); */
+    /* box-shadow: 0 10px 25px rgba(40, 167, 69, 0.3); */
 }
 
 /* Floating Elements */
 .floating-element {
-    animation: float 6s ease-in-out infinite;
+    /* animation: float 6s ease-in-out infinite; */
 }
 
 .floating-element:nth-child(2n) {
-    animation-delay: -3s;
+    /* animation-delay: -3s; */
 }
 
 /* Scroll Animations */
 .scroll-animate {
+    /* transition: none !important; */
     opacity: 0;
     transform: translateY(50px);
-    transition: all 0.8s ease;
 }
 
 .scroll-animate.animate {
-    opacity: 1;
-    transform: translateY(0);
+    /* transform: translateY(0); */
 }
 
 /* Background Patterns */
@@ -295,17 +294,17 @@
 
 /* Loading States */
 .loading-shimmer {
+    /* animation: shimmer 2s infinite; */
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
-    animation: shimmer 2s infinite;
 }
 
 @keyframes shimmer {
     0% {
-        background-position: -200% 0;
+        /* background-position: -200% 0; */
     }
     100% {
-        background-position: 200% 0;
+        /* background-position: 200% 0; */
     }
 }
 
@@ -316,6 +315,7 @@
 }
 
 .interactive-hover::after {
+    /* transition: none !important; */
     content: '';
     position: absolute;
     top: 50%;
@@ -325,12 +325,11 @@
     background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    transition: all 0.3s ease;
 }
 
 .interactive-hover:hover::after {
-    width: 300px;
-    height: 300px;
+    /* width: 300px; */
+    /* height: 300px; */
 }
 
 /* Eco-friendly Theme Elements */
@@ -345,12 +344,12 @@
     right: -10px;
     font-size: 1.5rem;
     opacity: 0;
-    transition: all 0.3s ease;
+    /* transition: none !important; */
 }
 
 .leaf-decoration:hover::before {
+    /* transform: rotate(15deg); */
     opacity: 1;
-    transform: rotate(15deg);
 }
 
 /* Success Indicators */
@@ -359,6 +358,7 @@
 }
 
 .success-indicator::after {
+    /* transition: none !important; */
     content: '✓';
     position: absolute;
     top: -5px;
@@ -375,10 +375,10 @@
     font-weight: bold;
     opacity: 0;
     transform: scale(0);
-    transition: all 0.3s ease;
 }
 
 .success-indicator.active::after {
+    /* transform: scale(1); */
     opacity: 1;
     transform: scale(1);
 }

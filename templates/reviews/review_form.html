@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - Write Review{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
+<style>
+.rating-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.rating-input input[type="radio"] {
+    display: none;
+}
+
+.rating-input label {
+    cursor: pointer;
+    font-size: 2rem;
+    color: #ddd;
+    transition: color 0.3s ease;
+}
+
+.rating-input label:hover,
+.rating-input label:hover ~ label,
+.rating-input input[type="radio"]:checked ~ label {
+    color: #ffc107;
+}
+
+.image-preview {
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.char-counter {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.char-counter.warning {
+    color: #ffc107;
+}
+
+.char-counter.danger {
+    color: #dc3545;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'core:home' %}" class="text-success">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#" class="text-success">Products</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'reviews:review_list' product.pk %}" class="text-success">Reviews</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        {% if is_edit %}Edit Review{% else %}Write Review{% endif %}
+                    </li>
+                </ol>
+            </nav>
+            <h1 class="fw-bold text-success mb-2">
+                <i class="fas fa-star me-3"></i>
+                {% if is_edit %}Edit Your Review{% else %}Write a Review{% endif %}
+            </h1>
+            <p class="text-muted">{{ product.title }}</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'reviews:review_list' product.pk %}" class="btn btn-outline-success">
+                <i class="fas fa-arrow-left me-2"></i>Back to Reviews
+            </a>
+        </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <div class="bg-success text-white rounded d-flex align-items-center justify-content-center" 
+                         style="height: 80px;">
+                        <i class="fas fa-box fa-2x"></i>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <h5 class="mb-1">{{ product.title }}</h5>
+                    <p class="text-muted mb-0">{{ product.description|truncatechars:150 }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>
+                        {% if is_edit %}Edit Your Review{% else %}Your Review{% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" id="reviewForm">
+                        {% csrf_token %}
+                        
+                        <!-- Rating -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-star me-2"></i>{{ form.rating.label }}
+                            </label>
+                            <div class="rating-input mb-2">
+                                {% for choice in form.rating.field.choices %}
+                                    <input type="radio" name="rating" value="{{ choice.0 }}" 
+                                           id="rating{{ choice.0 }}"
+                                           {% if form.rating.value == choice.0|stringformat:"s" %}checked{% endif %}>
+                                    <label for="rating{{ choice.0 }}" title="{{ choice.1 }}">★</label>
+                                {% endfor %}
+                            </div>
+                            <div class="form-text">{{ form.rating.help_text }}</div>
+                            {% if form.rating.errors %}
+                                <div class="text-danger small mt-1">{{ form.rating.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-heading me-2"></i>{{ form.title.label }}
+                            </label>
+                            {{ form.title }}
+                            <div class="d-flex justify-content-between">
+                                <div class="form-text">Give your review a helpful title</div>
+                                <div class="char-counter" id="titleCounter">0/200</div>
+                            </div>
+                            {% if form.title.errors %}
+                                <div class="text-danger small mt-1">{{ form.title.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Content -->
+                        <div class="mb-4">
+                            <label for="{{ form.content.id_for_label }}" class="form-label fw-bold">
+                                <i class="fas fa-comment me-2"></i>{{ form.content.label }}
+                            </label>
+                            {{ form.content }}
+                            <div class="d-flex justify-content-between">
+                                <div class="form-text">Share your detailed experience with this product</div>
+                                <div class="char-counter" id="contentCounter">0/2000</div>
+                            </div>
+                            {% if form.content.errors %}
+                                <div class="text-danger small mt-1">{{ form.content.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Images -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-camera me-2"></i>Photos (Optional)
+                            </label>
+                            <p class="form-text mb-3">Add up to 3 photos to help other buyers see the product</p>
+                            
+                            <div class="row g-3">
+                                {% for field in form %}
+                                    {% if 'image' in field.name %}
+                                        <div class="col-md-4">
+                                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                            {{ field }}
+                                            <div class="image-preview-container mt-2" id="preview{{ forloop.counter }}"></div>
+                                            {% if field.errors %}
+                                                <div class="text-danger small mt-1">{{ field.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="form-text mt-2">{{ form.image1.help_text }}</div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'reviews:review_list' product.pk %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-2"></i>
+                                {% if is_edit %}Update Review{% else %}Submit Review{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Review Guidelines -->
+            <div class="card mt-4 border-info">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Review Guidelines
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Focus on the product's features, quality, and your experience
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Be honest and helpful to other potential buyers
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Include details about delivery, packaging, and condition
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-times text-danger me-2"></i>
+                            Don't include personal information or inappropriate content
+                        </li>
+                        <li class="mb-0">
+                            <i class="fas fa-times text-danger me-2"></i>
+                            Avoid promotional content or spam
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const titleInput = document.querySelector('#id_title');
+    const contentInput = document.querySelector('#id_content');
+    const titleCounter = document.getElementById('titleCounter');
+    const contentCounter = document.getElementById('contentCounter');
+    
+    // Character counters
+    function updateCounter(input, counter, maxLength) {
+        const length = input.value.length;
+        counter.textContent = `${length}/${maxLength}`;
+        
+        counter.className = 'char-counter';
+        if (length > maxLength * 0.9) {
+            counter.classList.add('danger');
+        } else if (length > maxLength * 0.8) {
+            counter.classList.add('warning');
+        }
+    }
+    
+    if (titleInput && titleCounter) {
+        titleInput.addEventListener('input', function() {
+            updateCounter(this, titleCounter, 200);
+        });
+        updateCounter(titleInput, titleCounter, 200);
+    }
+    
+    if (contentInput && contentCounter) {
+        contentInput.addEventListener('input', function() {
+            updateCounter(this, contentCounter, 2000);
+        });
+        updateCounter(contentInput, contentCounter, 2000);
+    }
+    
+    // Image preview
+    document.querySelectorAll('input[type="file"]').forEach(function(input, index) {
+        input.addEventListener('change', function() {
+            const file = this.files[0];
+            const previewContainer = document.getElementById(`preview${index + 1}`);
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewContainer.innerHTML = `
+                        <img src="${e.target.result}" class="image-preview" alt="Preview">
+                        <div class="mt-1 small text-muted">${file.name}</div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.innerHTML = '';
+            }
+        });
+    });
+    
+    // Rating interaction
+    document.querySelectorAll('.rating-input label').forEach(function(label) {
+        label.addEventListener('mouseenter', function() {
+            const rating = this.getAttribute('for').replace('rating', '');
+            updateRatingDisplay(rating);
+        });
+    });
+    
+    document.querySelector('.rating-input').addEventListener('mouseleave', function() {
+        const checkedRating = document.querySelector('input[name="rating"]:checked');
+        if (checkedRating) {
+            updateRatingDisplay(checkedRating.value);
+        } else {
+            updateRatingDisplay(0);
+        }
+    });
+    
+    function updateRatingDisplay(rating) {
+        document.querySelectorAll('.rating-input label').forEach(function(label, index) {
+            const labelRating = label.getAttribute('for').replace('rating', '');
+            if (labelRating <= rating) {
+                label.style.color = '#ffc107';
+            } else {
+                label.style.color = '#ddd';
+            }
+        });
+    }
+    
+    // Form validation
+    document.getElementById('reviewForm').addEventListener('submit', function(e) {
+        const rating = document.querySelector('input[name="rating"]:checked');
+        const title = document.querySelector('#id_title').value.trim();
+        const content = document.querySelector('#id_content').value.trim();
+        
+        if (!rating) {
+            e.preventDefault();
+            alert('Please select a rating.');
+            return;
+        }
+        
+        if (!title || title.length < 5) {
+            e.preventDefault();
+            alert('Please enter a title (at least 5 characters).');
+            return;
+        }
+        
+        if (!content || content.length < 20) {
+            e.preventDefault();
+            alert('Please enter a detailed review (at least 20 characters).');
+            return;
+        }
+    });
+    
+    // Auto-resize textarea
+    if (contentInput) {
+        contentInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    }
+});
+</script>
+{% endblock %}

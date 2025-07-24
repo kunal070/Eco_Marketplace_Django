@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <!-- Search Bar (Center) -->
             <div class="mx-auto d-lg-flex d-none">
-                <form class="d-flex" method="GET" action="#" style="width: 400px;">
+                <form class="d-flex" method="GET" action="{% url 'products:search_results' %}" style="width: 400px;">
                     <input class="form-control rounded-pill" type="search" placeholder="Search eco-friendly products..."
                            aria-label="Search" name="q" autocomplete="off" spellcheck="false">
                 </form>
@@ -26,29 +26,37 @@
 
             <!-- Right Side Navigation -->
             <ul class="navbar-nav ms-auto">
-                <!-- Products Dropdown -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-shopping-bag me-1"></i> Products
+                <!-- Product Link -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'products:product_list' %}">
+                        <i class="fas fa-shopping-bag me-1"></i> Product
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="productsDropdown">
-                        <li><a class="dropdown-item" href="#">All Products</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-laptop me-2"></i> Electronics</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-tshirt me-2"></i> Sustainable Fashion</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-home me-2"></i> Home & Garden</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-solar-panel me-2"></i> Green Energy</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-book me-2"></i> Books & Media</a></li>
-                    </ul>
                 </li>
 
                 <!-- Blog -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'core:about' %}">
+                    <a class="nav-link" href="{% url 'blog:green_tips' %}">
                         <i class="fas fa-leaf me-1"></i> Green Tips
                     </a>
                 </li>
+
+                <!-- Reviews -->
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'reviews:user_reviews' %}">
+                        <i class="fas fa-star me-1"></i> My Reviews
+                    </a>
+                </li>
+                {% endif %}
+
+                <!-- Messaging -->
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'messaging:inbox' %}">
+                        <i class="fas fa-envelope me-1"></i> Messages
+                    </a>
+                </li>
+                {% endif %}
 
                 <!-- About -->
                 <li class="nav-item">
@@ -69,31 +77,26 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="{% url 'authentication:profile' %}"><i class="fas fa-user me-2"></i> Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-plus me-2"></i> Sell Product</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-box me-2"></i> My Products</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i> Messages</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-bar me-2"></i> Dashboard</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_create' %}"><i class="fas fa-plus me-2"></i> Sell Product</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:my_products' %}"><i class="fas fa-box me-2"></i> My Products</a></li>
                             <li><a class="dropdown-item" href="{% url 'analytics:dashboard' %}"><i class="fas fa-chart-bar me-2"></i> Analytics</a></li>
                             <li><a class="dropdown-item" href="{% url 'analytics:user_history' %}"><i class="fas fa-history me-2"></i> Visit History</a></li>
-
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'authentication:logout' %}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
                         </ul>
                     </li>
                 {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'authentication:login' %}">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-warning text-dark fw-bold px-3 py-2 ms-2 rounded-pill" href="{% url 'authentication:register' %}">
+                            <i class="fas fa-user-plus me-1"></i> Register
+                        </a>
+                    </li>
                 {% endif %}
-
-                <!-- Temporary Login/Register (will be replaced with actual links) -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'authentication:login' %}">
-                        <i class="fas fa-sign-in-alt me-1"></i> Login
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link btn btn-warning text-dark fw-bold px-3 py-2 ms-2 rounded-pill" href="{% url 'authentication:register' %}">
-                        <i class="fas fa-user-plus me-1"></i> Register
-                    </a>
-                </li>
             </ul>
         </div>
     </div>

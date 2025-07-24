@@ -83,7 +83,7 @@ class Command(BaseCommand):
             image_urls = {
                 'iPhone 12': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80',
                 'Wooden Desk': 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=600&q=80',
-                'Nike Sneakers': 'https://images.unsplash.com/photo-1517260911205-8a3b174a3da7?auto=format&fit=crop&w=600&q=80',
+                'Nike Sneakers': 'https://images.pexels.com/photos/2529147/pexels-photo-2529147.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=600&q=80',
                 'Python Programming Book': 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80',
                 'Leather Jacket': 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80',
             }

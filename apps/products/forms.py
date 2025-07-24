@@ -93,7 +93,7 @@ class ProductForm(forms.ModelForm):
                 ProductImage.objects.create(
                     product=product,
                     image=image,
-                    is_primary=True
+                    is_main=True
                 )
         
         return product

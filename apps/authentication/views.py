@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import EditProfileForm
 from django.urls import reverse
 from django.contrib.sites.shortcuts import get_current_site
-from .utils import email_verification_token
+from .utils import email_verification_token, send_verification_code
 import random
 from django.core.mail import send_mail
 from django.views.generic import FormView
@@ -28,7 +28,8 @@ class RegisterView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        profile = UserProfile.objects.create(user=user)
+        phone_number = form.cleaned_data.get('phone_number')
+        profile = UserProfile.objects.create(user=user, phone_number=phone_number)
         login(self.request, user)
 
         # Generate verification token
@@ -47,6 +48,15 @@ class RegisterView(CreateView):
             recipient_list=[user.email],
             fail_silently=False,
         )
+
+        # --- SMS Verification ---
+        code = str(random.randint(100000, 999999))
+        profile.phone_verification_code = code
+        profile.is_phone_verified = False
+        profile.save()
+        send_verification_code(profile.phone_number, code)  # Make sure phone_number is in UserProfile
+
+        return redirect('authentication:verify_phone')
 
         return redirect('authentication:profile')
 
@@ -127,10 +137,12 @@ class VerifyPhoneView(LoginRequiredMixin, FormView):
 
         if profile.phone_verification_code == code:
             profile.is_phone_verified = True
-            profile.phone_verification_code = None
+            profile.phone_verification_code = None  # Clear used code
             profile.save()
             messages.success(self.request, "Phone number verified!")
+            return super().form_valid(form) 
         else:
             messages.error(self.request, "Invalid verification code.")
+            return self.form_invalid(form)  
 
-        return super().form_valid(form)
+        

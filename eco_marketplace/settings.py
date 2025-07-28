@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -176,3 +179,8 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Login redirect
 LOGIN_REDIRECT_URL = '/auth/profile/'  # or use reverse('authentication:profile')
+
+# Twilio Configuration for Messaging
+TWILIO_ACCOUNT_SID_REMOVED_REMOVED_REMOVED = os.getenv("TWILIO_ACCOUNT_SID_REMOVED_REMOVED_REMOVED")
+TWILIO_AUTH_TOKEN_REMOVED_REMOVED_REMOVED = os.getenv("TWILIO_AUTH_TOKEN_REMOVED_REMOVED_REMOVED")
+TWILIO_PHONE_NUMBER_REMOVED = os.getenv("TWILIO_PHONE_NUMBER_REMOVED")

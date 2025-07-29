@@ -1,14 +1,515 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Browse Categories - Eco Marketplace{% endblock %}
+
+{% block extra_css %}
+<style>
+    .categories-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border-radius: 16px;
+        padding: 48px 32px;
+        margin-bottom: 48px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .categories-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+        animation: float 20s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .categories-icon {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        margin: 0 auto 24px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .category-card {
+        transition: all 0.3s ease;
+        border: 2px solid #e9ecef;
+        border-radius: 16px;
+        padding: 24px;
+        height: 100%;
+        text-decoration: none;
+        background: white;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .category-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(40, 167, 69, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+    
+    .category-card:hover::before {
+        left: 100%;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        border-color: #28a745;
+        box-shadow: 0 20px 40px rgba(40, 167, 69, 0.2);
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .category-icon {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
+    
+    .category-card:hover .category-icon {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+    }
+    
+    .category-title {
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 12px;
+        font-size: 1.25rem;
+        text-align: center;
+    }
+    
+    .category-description {
+        color: #6c757d;
+        text-align: center;
+        margin-bottom: 16px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .category-stats {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+        margin-top: auto;
+    }
+    
+    .product-count {
+        font-weight: 700;
+        color: #28a745;
+        font-size: 1.1rem;
+        display: block;
+    }
+    
+    .stats-label {
+        color: #6c757d;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 32px;
+    }
+    
+    .breadcrumb-item a {
+        color: #28a745;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #20c997;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+    }
+    
+    .empty-icon {
+        background: #f8f9fa;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 12px 24px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
+    
+    .search-section {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+        margin-bottom: 32px;
+    }
+    
+    .search-box {
+        border-radius: 25px;
+        border: 2px solid #e9ecef;
+        padding: 12px 20px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .search-box:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+        outline: none;
+    }
+    
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+    }
+    
+    @media (max-width: 768px) {
+        .categories-header {
+            padding: 32px 20px;
+        }
+        
+        .categories-header .display-4 {
+            font-size: 2rem;
+        }
+        
+        .category-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        
+        .category-card {
+            padding: 20px;
+        }
+    }
+    
+    /* Category-specific icons and colors */
+    .category-solar .category-icon {
+        background: linear-gradient(135deg, #ffc107, #ff8c00);
+    }
+    
+    .category-fashion .category-icon {
+        background: linear-gradient(135deg, #e83e8c, #dc3545);
+    }
+    
+    .category-home .category-icon {
+        background: linear-gradient(135deg, #17a2b8, #007bff);
+    }
+    
+    .category-electronics .category-icon {
+        background: linear-gradient(135deg, #6f42c1, #495057);
+    }
+    
+    .category-food .category-icon {
+        background: linear-gradient(135deg, #28a745, #20c997);
+    }
+    
+    .category-zero-waste .category-icon {
+        background: linear-gradient(135deg, #fd7e14, #ffc107);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<h2>{{ page_title }}</h2>
-<ul class="list-group">
-  {% for category in categories %}
-    <li class="list-group-item">
-      <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
-      {% if category.description %}<br><small>{{ category.description }}</small>{% endif %}
-    </li>
-  {% empty %}
-    <li class="list-group-item">No categories found.</li>
-  {% endfor %}
-</ul>
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'core:home' %}">
+                    <i class="fas fa-home me-1"></i>Home
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'products:product_list' %}">Products</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Categories</li>
+        </ol>
+    </nav>
+
+    <!-- Categories Header -->
+    <div class="categories-header">
+        <div class="position-relative">
+            <div class="categories-icon">
+                <i class="fas fa-th-large"></i>
+            </div>
+            <h1 class="display-4 fw-bold mb-3">Browse Categories</h1>
+            <p class="fs-5 mb-0 opacity-90">
+                Discover eco-friendly products organized by category.<br>
+                Find exactly what you're looking for in our sustainable marketplace.
+            </p>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h5 class="mb-3 fw-bold text-success">
+                    <i class="fas fa-search me-2"></i>Search Categories
+                </h5>
+                <div class="input-group">
+                    <input type="text" id="categorySearch" class="form-control search-box" 
+                           placeholder="Search for categories...">
+                    <button class="btn btn-success" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <div class="text-muted">
+                    <i class="fas fa-tags me-2"></i>
+                    {{ categories.count }} categories available
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if categories %}
+        <!-- Categories Grid -->
+        <div class="category-grid" id="categoriesGrid">
+            {% for category in categories %}
+            <a href="{% url 'products:category_detail' category.slug %}" 
+               class="category-card {% if 'solar' in category.name|lower %}category-solar{% elif 'fashion' in category.name|lower %}category-fashion{% elif 'home' in category.name|lower or 'garden' in category.name|lower %}category-home{% elif 'electronic' in category.name|lower %}category-electronics{% elif 'food' in category.name|lower or 'organic' in category.name|lower %}category-food{% elif 'zero' in category.name|lower or 'waste' in category.name|lower %}category-zero-waste{% endif %}"
+               data-category-name="{{ category.name|lower }}">
+                
+                <div class="category-icon">
+                    {% if 'solar' in category.name|lower or 'energy' in category.name|lower %}
+                        <i class="fas fa-solar-panel"></i>
+                    {% elif 'fashion' in category.name|lower or 'clothing' in category.name|lower %}
+                        <i class="fas fa-tshirt"></i>
+                    {% elif 'home' in category.name|lower or 'garden' in category.name|lower %}
+                        <i class="fas fa-home"></i>
+                    {% elif 'electronic' in category.name|lower %}
+                        <i class="fas fa-laptop"></i>
+                    {% elif 'food' in category.name|lower or 'organic' in category.name|lower %}
+                        <i class="fas fa-apple-alt"></i>
+                    {% elif 'book' in category.name|lower or 'media' in category.name|lower %}
+                        <i class="fas fa-book"></i>
+                    {% elif 'craft' in category.name|lower or 'diy' in category.name|lower %}
+                        <i class="fas fa-hammer"></i>
+                    {% elif 'zero' in category.name|lower or 'waste' in category.name|lower %}
+                        <i class="fas fa-recycle"></i>
+                    {% elif 'sport' in category.name|lower %}
+                        <i class="fas fa-dumbbell"></i>
+                    {% elif 'furniture' in category.name|lower %}
+                        <i class="fas fa-chair"></i>
+                    {% else %}
+                        <i class="fas fa-leaf"></i>
+                    {% endif %}
+                </div>
+                
+                <h5 class="category-title">{{ category.name }}</h5>
+                
+                {% if category.description %}
+                <p class="category-description">{{ category.description|truncatewords:15 }}</p>
+                {% else %}
+                <p class="category-description">Explore sustainable {{ category.name|lower }} products</p>
+                {% endif %}
+                
+                <div class="category-stats">
+                    <span class="product-count">{{ category.get_products_count }}</span>
+                    <span class="stats-label">product{{ category.get_products_count|pluralize }}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="bg-light rounded-3 p-4 text-center">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h4 class="text-success fw-bold">{{ categories.count }}</h4>
+                            <p class="text-muted mb-0">Categories</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h4 class="text-success fw-bold">1,000+</h4>
+                            <p class="text-muted mb-0">Eco Products</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h4 class="text-success fw-bold">500+</h4>
+                            <p class="text-muted mb-0">Verified Sellers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-tags fa-4x text-muted"></i>
+            </div>
+            <h3 class="text-muted mb-3">No categories available</h3>
+            <p class="text-muted mb-4 fs-5">
+                Categories are being set up to organize our eco-friendly products.<br>
+                Check back soon for organized product browsing!
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{% url 'products:product_list' %}" class="btn btn-success btn-lg">
+                    <i class="fas fa-search me-2"></i>Browse All Products
+                </a>
+                <a href="{% url 'products:product_create' %}" class="btn btn-outline-success btn-lg">
+                    <i class="fas fa-plus me-2"></i>List Your Product
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Search functionality
+    $('#categorySearch').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        const categories = $('.category-card');
+        
+        categories.each(function() {
+            const categoryName = $(this).data('category-name');
+            const categoryDescription = $(this).find('.category-description').text().toLowerCase();
+            
+            if (categoryName.includes(searchTerm) || categoryDescription.includes(searchTerm)) {
+                $(this).fadeIn(200);
+            } else {
+                $(this).fadeOut(200);
+            }
+        });
+        
+        // Show/hide empty state
+        setTimeout(function() {
+            const visibleCategories = $('.category-card:visible').length;
+            if (visibleCategories === 0 && searchTerm.length > 0) {
+                showNoResultsMessage();
+            } else {
+                hideNoResultsMessage();
+            }
+        }, 250);
+    });
+    
+    // Add hover effects
+    $('.category-card').hover(
+        function() {
+            $(this).find('.category-icon').addClass('animate');
+        },
+        function() {
+            $(this).find('.category-icon').removeClass('animate');
+        }
+    );
+});
+
+function showNoResultsMessage() {
+    if ($('#noResults').length === 0) {
+        const noResultsHtml = `
+            <div id="noResults" class="col-12 text-center py-5">
+                <div class="bg-light rounded-3 p-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No categories found</h5>
+                    <p class="text-muted mb-0">Try searching with different keywords</p>
+                </div>
+            </div>
+        `;
+        $('#categoriesGrid').after(noResultsHtml);
+    }
+}
+
+function hideNoResultsMessage() {
+    $('#noResults').remove();
+}
+
+// Add some animation styles
+const style = document.createElement('style');
+style.textContent = `
+    .category-icon.animate {
+        animation: bounce 0.6s ease-in-out;
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0) scale(1);
+        }
+        40% {
+            transform: translateY(-10px) scale(1.05);
+        }
+        60% {
+            transform: translateY(-5px) scale(1.02);
+        }
+    }
+    
+    .category-card {
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
 {% endblock %}

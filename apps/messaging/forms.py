@@ -32,16 +32,17 @@ class MessageForm(forms.ModelForm):
 
 class ConversationForm(forms.ModelForm):
     """
-    Form for starting new conversations
+    Form for starting new conversations (refactored to match ProductForm style)
     """
     recipient = forms.ModelChoiceField(
         queryset=User.objects.all(),
         widget=forms.Select(attrs={
-            'class': 'form-control'
+            'class': 'form-select',
         }),
-        empty_label="Select recipient..."
+        empty_label="Select recipient...",
+        help_text="Choose the user you want to message."
     )
-    
+
     message_content = forms.CharField(
         widget=forms.Textarea(attrs={
             'class': 'form-control',
@@ -49,12 +50,13 @@ class ConversationForm(forms.ModelForm):
             'placeholder': 'Type your message here...',
             'required': True
         }),
-        label='Message'
+        label='Message',
+        help_text="Enter the content of your message."
     )
 
     class Meta:
         model = Conversation
-        fields = ['subject', 'recipient', 'message_content']
+        fields = ['subject', 'recipient']
         widgets = {
             'subject': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -66,19 +68,33 @@ class ConversationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        
         # Exclude current user from recipient choices
         if self.user:
             self.fields['recipient'].queryset = User.objects.exclude(pk=self.user.pk)
+        self.fields['subject'].help_text = "Give your conversation a clear subject."
+
+    def clean_subject(self):
+        subject = self.cleaned_data.get('subject', '').strip()
+        if not subject:
+            raise forms.ValidationError("Subject is required.")
+        if len(subject) < 3:
+            raise forms.ValidationError("Subject must be at least 3 characters long.")
+        return subject
+
+    def clean_message_content(self):
+        message = self.cleaned_data.get('message_content', '').strip()
+        if not message:
+            raise forms.ValidationError("Message content is required.")
+        if len(message) < 10:
+            raise forms.ValidationError("Message must be at least 10 characters long.")
+        return message
 
     def save(self, commit=True):
         conversation = super().save(commit=False)
         if commit:
             conversation.save()
-            # Add participants
             conversation.participants.add(self.user, self.cleaned_data['recipient'])
-            
-            # Create first message
+            # Create the first message
             Message.objects.create(
                 conversation=conversation,
                 sender=self.user,

@@ -154,16 +154,16 @@
                 
                 <!-- Quick Reply Form -->
                 <div class="quick-reply-form">
-                    <form method="post" class="d-flex  gap-2"  style="height: 50px;">
+                    <form method="post" class="d-flex  gap-2"  style="height: 80px;">
                         {% csrf_token %}
-                        <div class="flex-grow-1">
+                        <div class="flex-grow-1" style="height: 40px;">
                             {{ reply_form.content }}
                         </div>
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-success" style="height: 40px;">
                             <i class="fas fa-paper-plane me-1"></i>Send
                         </button>
                     </form>
-                    <small class="text-muted">Press Enter to send, Shift+Enter for new line</small>
+                    <!-- <small class="text-muted">Press Enter to send, Shift+Enter for new line</small> -->
                 </div>
             </div>
 
@@ -235,6 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Mark conversation as read
+    /*
     fetch('{% url "messaging:mark_as_read" %}', {
         method: 'POST',
         headers: {
@@ -243,6 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         body: 'conversation_id={{ conversation.pk }}'
     });
+    */
 });
 </script>
 {% endblock %}

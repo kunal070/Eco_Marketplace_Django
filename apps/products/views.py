@@ -13,8 +13,14 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 
-from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+
+from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
@@ -329,8 +335,55 @@ class MyFavoritesView(LoginRequiredMixin, ListView):
             
         return context
 
+
+
+@login_required
 @require_POST
 def toggle_favorite(request, product_id):
+    """
+    AJAX endpoint to toggle favorite status for a product
+    """
+    try:
+        product = get_object_or_404(Product, pk=product_id, is_active=True, is_approved=True)
+        
+        # Check if favorite already exists
+        favorite = ProductFavorite.objects.filter(
+            product=product,
+            user=request.user
+        ).first()
+        
+        if favorite:
+            # Remove favorite
+            favorite.delete()
+            action = 'removed'
+            favorited = False
+        else:
+            # Add favorite
+            ProductFavorite.objects.create(
+                product=product,
+                user=request.user
+            )
+            action = 'added'
+            favorited = True
+        
+        return JsonResponse({
+            'status': 'success',
+            'action': action,
+            'favorited': favorited,
+            'message': f'Product {action} {"to" if action == "added" else "from"} favorites'
+        })
+    
+    except Product.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Product not found'
+        }, status=404)
+    
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'An error occurred while processing your request'
+        }, status=500)
     """
     AJAX endpoint to toggle favorite status for a product
     """

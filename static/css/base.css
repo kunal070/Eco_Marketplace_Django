@@ -475,3 +475,173 @@ footer .btn:hover {
 .category-card:hover .category-icon {
     transform: scale(1.1) rotate(5deg);
 }
+
+
+/* ==========================================
+   DROPDOWN FIXES - Add this to the end of your base.css file
+   ========================================== */
+
+/* Override Bootstrap dropdown defaults to ensure they work */
+.navbar-nav .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    z-index: 1050 !important;
+    display: none !important;
+    float: left !important;
+    min-width: 10rem !important;
+    padding: 0.5rem 0 !important;
+    margin: 0.125rem 0 0 !important;
+    font-size: 0.875rem !important;
+    color: #212529 !important;
+    text-align: left !important;
+    list-style: none !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid rgba(0,0,0,.15) !important;
+    border-radius: 0.375rem !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Show dropdown when Bootstrap adds the 'show' class */
+.navbar-nav .dropdown-menu.show {
+    display: block !important;
+}
+
+/* Dropdown items styling */
+.navbar-nav .dropdown-item {
+    display: block !important;
+    width: 100% !important;
+    padding: 0.5rem 1rem !important;
+    clear: both !important;
+    font-weight: 400 !important;
+    color: #212529 !important;
+    text-align: inherit !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    background-color: transparent !important;
+    border: 0 !important;
+}
+
+/* Dropdown item hover effect */
+.navbar-nav .dropdown-item:hover,
+.navbar-nav .dropdown-item:focus {
+    color: #1e2125 !important;
+    background-color: #e9ecef !important;
+}
+
+/* Dropdown item active state */
+.navbar-nav .dropdown-item.active,
+.navbar-nav .dropdown-item:active {
+    color: #fff !important;
+    text-decoration: none !important;
+    background-color: #0d6efd !important;
+}
+
+/* Dropdown item disabled state */
+.navbar-nav .dropdown-item.disabled,
+.navbar-nav .dropdown-item:disabled {
+    color: #adb5bd !important;
+    pointer-events: none !important;
+    background-color: transparent !important;
+}
+
+/* Dropdown divider */
+.navbar-nav .dropdown-divider {
+    height: 0 !important;
+    margin: 0.5rem 0 !important;
+    overflow: hidden !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Ensure dropdowns appear above other content */
+.navbar {
+    z-index: 1030 !important;
+}
+
+.dropdown-menu {
+    z-index: 1050 !important;
+}
+
+/* Fix positioning for right-aligned dropdowns */
+.navbar-nav .dropdown-menu-end {
+    right: 0 !important;
+    left: auto !important;
+}
+
+/* Mobile dropdown adjustments */
+@media (max-width: 991.98px) {
+    .navbar-nav .dropdown-menu {
+        position: static !important;
+        float: none !important;
+        width: auto !important;
+        margin-top: 0 !important;
+        background-color: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+    }
+    
+    .navbar-nav .dropdown-item {
+        padding: 0.5rem 1.5rem !important;
+    }
+}
+
+/* Specific fixes for your navbar structure */
+#categoriesDropdown + .dropdown-menu,
+#userDropdown + .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    z-index: 1050 !important;
+    display: none !important;
+}
+
+#categoriesDropdown + .dropdown-menu.show,
+#userDropdown + .dropdown-menu.show {
+    display: block !important;
+}
+
+/* Prevent interference from your base styles */
+.navbar-nav .dropdown-toggle,
+.navbar-nav .dropdown-item {
+    transition: background-color 0.15s ease-in-out !important;
+}
+
+/* Fix any overflow issues */
+.navbar-collapse {
+    overflow: visible !important;
+}
+
+.container-fluid {
+    overflow: visible !important;
+}
+
+/* Ensure dropdown icons work */
+.dropdown-toggle::after {
+    display: inline-block !important;
+    margin-left: 0.255em !important;
+    vertical-align: 0.255em !important;
+    content: "" !important;
+    border-top: 0.3em solid !important;
+    border-right: 0.3em solid transparent !important;
+    border-bottom: 0 !important;
+    border-left: 0.3em solid transparent !important;
+}
+
+.dropdown-toggle:empty::after {
+    margin-left: 0 !important;
+}
+
+/* Force proper Bootstrap dropdown behavior */
+.navbar-nav .dropdown.show .dropdown-menu {
+    display: block !important;
+}
+
+.navbar-nav .dropdown:hover .dropdown-menu {
+    display: block !important;
+}
+
+/* Fix badge positioning in dropdowns */
+.navbar-nav .dropdown-item .badge {
+    float: right !important;
+    margin-top: 2px !important;
+}

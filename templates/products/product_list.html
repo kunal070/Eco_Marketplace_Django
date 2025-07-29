@@ -25,10 +25,21 @@
         height: 220px;
         object-fit: cover;
         transition: transform 0.3s ease;
+        background-color: #f8f9fa;
     }
     
     .product-card:hover .product-image {
         transform: scale(1.05);
+    }
+    
+    .image-placeholder {
+        height: 220px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: #6c757d;
     }
     
     .price {
@@ -126,8 +137,8 @@
     }
     
     .favorite-btn {
-        background: rgba(255, 255, 255, 0.9);
-        border: none;
+        background: rgba(255, 255, 255, 0.95);
+        border: 2px solid transparent;
         border-radius: 50%;
         width: 40px;
         height: 40px;
@@ -136,11 +147,19 @@
         justify-content: center;
         transition: all 0.3s ease;
         backdrop-filter: blur(10px);
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     
     .favorite-btn:hover {
         background: rgba(255, 255, 255, 1);
         transform: scale(1.1);
+        border-color: #dc3545;
+    }
+    
+    .favorite-btn.favorited {
+        background: rgba(220, 53, 69, 0.1);
+        border-color: #dc3545;
     }
     
     .list-group-item {
@@ -224,6 +243,17 @@
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         margin-bottom: 24px;
     }
+    
+    /* Loading states */
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .loading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
 </style>
 {% endblock %}
 
@@ -279,7 +309,7 @@
                         <a href="?category={{ category.slug }}" 
                            class="list-group-item list-group-item-action {% if request.GET.category == category.slug %}active{% endif %}">
                             <i class="fas fa-tag me-2"></i>{{ category.name }}
-                            <span class="badge bg-secondary float-end">{{ category.product_set.count }}</span>
+                            <span class="badge bg-secondary float-end">{{ category.products.count }}</span>
                         </a>
                         {% endfor %}
                     </div>
@@ -305,43 +335,6 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-outline-success mt-3 w-100">Apply Price Filter</button>
-                    </form>
-                </div>
-
-                <!-- Rating Filter -->
-                <div class="mb-4">
-                    <h6 class="fw-bold mb-3 text-dark">Rating</h6>
-                    <form method="get">
-                        {% for key, value in request.GET.items %}
-                            {% if key != 'rating' %}
-                                <input type="hidden" name="{{ key }}" value="{{ value }}">
-                            {% endif %}
-                        {% endfor %}
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="rating" id="rating-all" 
-                                   value="" {% if not request.GET.rating %}checked{% endif %}>
-                            <label class="form-check-label" for="rating-all">All Ratings</label>
-                        </div>
-                        {% for i in "54321" %}
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="rating" id="rating-{{ i }}" 
-                                   value="{{ i }}" {% if request.GET.rating == i %}checked{% endif %}>
-                            <label class="form-check-label" for="rating-{{ i }}">
-                                {% if i == "5" %}
-                                    <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
-                                {% elif i == "4" %}
-                                    <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
-                                {% elif i == "3" %}
-                                    <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
-                                {% elif i == "2" %}
-                                    <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
-                                {% elif i == "1" %}
-                                    <i class="fas fa-star text-warning"></i>
-                                {% endif %}
-                                & up
-                            </label>
-                        </div>
-                        {% endfor %}
                     </form>
                 </div>
 
@@ -372,13 +365,20 @@
                         {% endif %}
                     </div>
                     <div class="col-md-6 text-md-end mt-3 mt-md-0">
-                        <select class="form-select d-inline-block w-auto">
-                            <option>Sort by</option>
-                            <option value="newest">Newest</option>
-                            <option value="price_low">Price: Low to High</option>
-                            <option value="price_high">Price: High to Low</option>
-                            <option value="rating">Highest Rated</option>
-                        </select>
+                        <form method="get" class="d-inline">
+                            {% for key, value in request.GET.items %}
+                                {% if key != 'sort' %}
+                                    <input type="hidden" name="{{ key }}" value="{{ value }}">
+                                {% endif %}
+                            {% endfor %}
+                            <select name="sort" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+                                <option value="">Sort by</option>
+                                <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest</option>
+                                <option value="price_low" {% if request.GET.sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                                <option value="price_high" {% if request.GET.sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                                <option value="rating" {% if request.GET.sort == 'rating' %}selected{% endif %}>Highest Rated</option>
+                            </select>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -394,19 +394,31 @@
                                     {% if product.images.first.remote_image_url %}
                                         <img src="{{ product.images.first.remote_image_url }}"
                                              class="card-img-top product-image"
-                                             alt="{{ product.title }}">
+                                             alt="{{ product.title }}"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="image-placeholder" style="display: none;">
+                                            <i class="fas fa-image fa-3x mb-2"></i>
+                                            <small>Image not available</small>
+                                        </div>
                                     {% elif product.images.first.image %}
                                         <img src="{{ product.images.first.image.url }}"
                                              class="card-img-top product-image"
-                                             alt="{{ product.title }}">
+                                             alt="{{ product.title }}"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="image-placeholder" style="display: none;">
+                                            <i class="fas fa-image fa-3x mb-2"></i>
+                                            <small>Image not available</small>
+                                        </div>
                                     {% else %}
-                                        <div class="card-img-top product-image bg-light d-flex align-items-center justify-content-center">
-                                            <i class="fas fa-image fa-3x text-muted"></i>
+                                        <div class="image-placeholder">
+                                            <i class="fas fa-image fa-3x mb-2"></i>
+                                            <small>No image</small>
                                         </div>
                                     {% endif %}
                                 {% else %}
-                                    <div class="card-img-top product-image bg-light d-flex align-items-center justify-content-center">
-                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    <div class="image-placeholder">
+                                        <i class="fas fa-image fa-3x mb-2"></i>
+                                        <small>No image</small>
                                     </div>
                                 {% endif %}
                                 
@@ -418,10 +430,10 @@
                                 <!-- Favorite Button -->
                                 {% if user.is_authenticated %}
                                 <div class="position-absolute top-0 end-0 m-3">
-                                    <button class="btn favorite-btn" 
+                                    <button class="btn favorite-btn {% if product.is_favorited_by_user %}favorited{% endif %}" 
                                             data-product-id="{{ product.pk }}"
-                                            {% if product.is_favorited_by_user %}data-favorited="true"{% endif %}>
-                                        <i class="fas fa-heart {% if product.is_favorited_by_user %}text-danger{% endif %}"></i>
+                                            data-favorited="{% if product.is_favorited_by_user %}true{% else %}false{% endif %}">
+                                        <i class="{% if product.is_favorited_by_user %}fas{% else %}far{% endif %} fa-heart {% if product.is_favorited_by_user %}text-danger{% endif %}"></i>
                                     </button>
                                 </div>
                                 {% endif %}
@@ -463,15 +475,20 @@
                                 <div class="mt-auto">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div class="price">${{ product.price }}</div>
+                                        {% if product.is_negotiable %}
+                                            <small class="text-success">
+                                                <i class="fas fa-handshake me-1"></i>Negotiable
+                                            </small>
+                                        {% endif %}
                                     </div>
                                     <div class="d-grid gap-2">
                                         <a href="{% url 'products:product_detail' product.pk %}" 
                                            class="btn btn-outline-primary">
                                             <i class="fas fa-eye me-2"></i>View Details
                                         </a>
-                                        {% if user.is_authenticated %}
-                                        <a href="{% url 'messaging:contact_seller' product.pk %}" 
-                                           class="btn btn-outline-success">
+                                        {% if user.is_authenticated and user != product.seller %}
+                                        <a href="#" class="btn btn-outline-success contact-seller-btn"
+                                           data-product-id="{{ product.pk }}">
                                             <i class="fas fa-comment me-2"></i>Contact Seller
                                         </a>
                                         {% endif %}
@@ -483,7 +500,7 @@
                             <div class="card-footer">
                                 <small class="text-muted">
                                     <i class="fas fa-map-marker-alt me-1"></i>
-                                    {{ product.seller.location|default:"Location not specified" }}
+                                    {{ product.location|default:"Location not specified" }}
                                 </small>
                             </div>
                         </div>
@@ -552,42 +569,108 @@
         </div>
     </div>
 </div>
+
+<!-- CSRF Token for AJAX -->
+{% csrf_token %}
 {% endblock %}
 
 {% block extra_js %}
+<!-- Add jQuery if not already included -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    const csrftoken = getCookie('csrftoken');
+    
     // Favorite button functionality
     $('.favorite-btn').click(function() {
         const btn = $(this);
         const productId = btn.data('product-id');
-        const isFavorited = btn.data('favorited');
+        const isFavorited = btn.data('favorited') === 'true';
+        
+        // Prevent multiple clicks
+        if (btn.hasClass('loading')) return;
+        
+        btn.addClass('loading').prop('disabled', true);
         
         $.ajax({
             url: `/products/${productId}/toggle-favorite/`,
             method: 'POST',
             headers: {
-                'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
+                'X-CSRFToken': csrftoken
             },
             success: function(response) {
                 if (response.status === 'success') {
                     const icon = btn.find('i');
                     if (response.action === 'added') {
                         icon.removeClass('far').addClass('fas text-danger');
-                        btn.data('favorited', true);
+                        btn.addClass('favorited').data('favorited', 'true');
+                        showNotification('💚 Added to favorites!', 'success');
                     } else {
                         icon.removeClass('fas text-danger').addClass('far');
-                        btn.data('favorited', false);
+                        btn.removeClass('favorited').data('favorited', 'false');
+                        showNotification('💔 Removed from favorites', 'info');
                     }
+                } else {
+                    showNotification('❌ Something went wrong. Please try again.', 'danger');
                 }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', error);
+                if (xhr.status === 403) {
+                    showNotification('❌ Please log in to favorite products.', 'warning');
+                } else {
+                    showNotification('❌ Something went wrong. Please try again.', 'danger');
+                }
+            },
+            complete: function() {
+                btn.removeClass('loading').prop('disabled', false);
             }
         });
     });
-
-    // Rating filter form submission
-    $('input[name="rating"]').change(function() {
-        $(this).closest('form').submit();
+    
+    // Contact seller button (placeholder - you can implement messaging later)
+    $('.contact-seller-btn').click(function(e) {
+        e.preventDefault();
+        showNotification('💬 Messaging feature coming soon!', 'info');
     });
 });
+
+// Notification function
+function showNotification(message, type = 'info', duration = 4000) {
+    // Remove existing notifications
+    $('.notification').remove();
+    
+    const notification = $(`
+        <div class="alert alert-${type} alert-dismissible fade show position-fixed notification" 
+             style="top: 20px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `);
+    
+    $('body').append(notification);
+    
+    setTimeout(function() {
+        notification.fadeOut(function() {
+            $(this).remove();
+        });
+    }, duration);
+}
 </script>
 {% endblock %}

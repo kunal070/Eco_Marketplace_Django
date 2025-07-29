@@ -1,0 +1,569 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - Get in Touch with Our Eco Team{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
+<style>
+    .contact-hero {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 16px;
+        padding: 3rem 2rem;
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+    
+    .contact-form-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2.5rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+        height: 100%;
+    }
+    
+    .contact-info-card {
+        background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        border-radius: 16px;
+        padding: 2.5rem;
+        color: white;
+        height: 100%;
+    }
+    
+    .contact-method {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+    
+    .contact-method:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+    
+    .contact-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 12px;
+        border: 2px solid #e9ecef;
+        padding: 1rem 1.25rem;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+        outline: none;
+    }
+    
+    .btn {
+        border-radius: 12px;
+        font-weight: 600;
+        padding: 1rem 2rem;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        border: none;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
+    
+    .map-container {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+        margin-top: 3rem;
+    }
+    
+    .faq-section {
+        background: #f8f9fa;
+        border-radius: 16px;
+        padding: 3rem 2rem;
+        margin-top: 3rem;
+    }
+    
+    .faq-item {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+    
+    .faq-item:hover {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .eco-stats {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+        margin-top: 2rem;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-green);
+        margin-bottom: 0.5rem;
+    }
+    
+    .social-links a {
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-decoration: none;
+        margin: 0 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="contact-hero">
+        <h1 class="display-4 fw-bold text-success mb-3">
+            <i class="fas fa-comments me-3"></i>Get in Touch
+        </h1>
+        <p class="lead text-muted mb-4">
+            Have questions about sustainable living or need help with our marketplace? 
+            We'd love to hear from you! Our eco-friendly team is here to help.
+        </p>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="d-flex justify-content-center gap-4 flex-wrap">
+                    <div class="text-center">
+                        <div class="text-success fw-bold fs-4">24/7</div>
+                        <small class="text-muted">Customer Support</small>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-success fw-bold fs-4">&lt;2hrs</div>
+                        <small class="text-muted">Response Time</small>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-success fw-bold fs-4">100%</div>
+                        <small class="text-muted">Satisfaction Rate</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Contact Form -->
+        <div class="col-lg-8 mb-4">
+            <div class="contact-form-card">
+                <h3 class="fw-bold text-success mb-4">
+                    <i class="fas fa-envelope me-3"></i>Send Us a Message
+                </h3>
+                
+                <form method="post" id="contactForm">
+                    {% csrf_token %}
+                    <div class="row">
+                        <!-- Name -->
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label fw-bold">
+                                <i class="fas fa-user me-2"></i>Full Name *
+                            </label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   placeholder="Your full name" required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label fw-bold">
+                                <i class="fas fa-envelope me-2"></i>Email Address *
+                            </label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   placeholder="your@email.com" required>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label fw-bold">
+                                <i class="fas fa-phone me-2"></i>Phone Number
+                            </label>
+                            <input type="tel" class="form-control" id="phone" name="phone" 
+                                   placeholder="(123) 456-7890">
+                        </div>
+
+                        <!-- Subject Category -->
+                        <div class="col-md-6 mb-3">
+                            <label for="subject_category" class="form-label fw-bold">
+                                <i class="fas fa-tag me-2"></i>Subject Category *
+                            </label>
+                            <select class="form-select" id="subject_category" name="subject_category" required>
+                                <option value="">Select a category</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Technical Support</option>
+                                <option value="billing">Billing & Payments</option>
+                                <option value="partnership">Partnership Opportunities</option>
+                                <option value="sustainability">Sustainability Questions</option>
+                                <option value="feedback">Feedback & Suggestions</option>
+                                <option value="report">Report an Issue</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Subject -->
+                        <div class="col-12 mb-3">
+                            <label for="subject" class="form-label fw-bold">
+                                <i class="fas fa-heading me-2"></i>Subject *
+                            </label>
+                            <input type="text" class="form-control" id="subject" name="subject" 
+                                   placeholder="Brief description of your inquiry" required>
+                        </div>
+
+                        <!-- Message -->
+                        <div class="col-12 mb-4">
+                            <label for="message" class="form-label fw-bold">
+                                <i class="fas fa-comment me-2"></i>Message *
+                            </label>
+                            <textarea class="form-control" id="message" name="message" rows="6" 
+                                      placeholder="Tell us more about your inquiry..." required></textarea>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Please include as much detail as possible to help us assist you better.
+                            </div>
+                        </div>
+
+                        <!-- Newsletter Subscription -->
+                        <div class="col-12 mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="newsletter" 
+                                       name="newsletter" value="yes">
+                                <label class="form-check-label" for="newsletter">
+                                    <i class="fas fa-leaf me-2 text-success"></i>
+                                    Subscribe to our eco-friendly newsletter for green tips and updates
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success btn-lg w-100">
+                                <i class="fas fa-paper-plane me-2"></i>Send Message
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="col-lg-4 mb-4">
+            <div class="contact-info-card">
+                <h3 class="fw-bold mb-4">
+                    <i class="fas fa-map-marker-alt me-3"></i>Contact Information
+                </h3>
+                
+                <!-- Address -->
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Visit Our Office</h5>
+                    <p class="mb-0">
+                        123 Green Street<br>
+                        Eco City, EC 12345<br>
+                        Canada
+                    </p>
+                </div>
+
+                <!-- Phone -->
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Call Us</h5>
+                    <p class="mb-1">
+                        <strong>Main:</strong> +1 (234) 567-8900<br>
+                        <strong>Support:</strong> +1 (234) 567-8901
+                    </p>
+                    <small>Mon-Fri: 9AM-6PM EST</small>
+                </div>
+
+                <!-- Email -->
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Email Us</h5>
+                    <p class="mb-0">
+                        <strong>General:</strong> info@ecomarket.com<br>
+                        <strong>Support:</strong> support@ecomarket.com<br>
+                        <strong>Partnerships:</strong> partners@ecomarket.com
+                    </p>
+                </div>
+
+                <!-- Social Media -->
+                <div class="mt-4">
+                    <h5 class="fw-bold mb-3">Follow Us</h5>
+                    <div class="social-links">
+                        <a href="#" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-container">
+        <h3 class="fw-bold text-success mb-4 text-center">
+            <i class="fas fa-map me-3"></i>Find Us
+        </h3>
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <!-- Placeholder for Google Maps -->
+                <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted" 
+                     style="height: 300px;">
+                    <div class="text-center">
+                        <i class="fas fa-map fa-3x mb-3"></i>
+                        <h5>Interactive Map</h5>
+                        <p class="mb-0">Google Maps integration would go here</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5 class="fw-bold text-success mb-3">Getting Here</h5>
+                <div class="mb-3">
+                    <h6 class="fw-bold">
+                        <i class="fas fa-car me-2 text-primary"></i>By Car
+                    </h6>
+                    <p class="small text-muted mb-0">Free parking available. EV charging stations on-site.</p>
+                </div>
+                <div class="mb-3">
+                    <h6 class="fw-bold">
+                        <i class="fas fa-subway me-2 text-warning"></i>Public Transit
+                    </h6>
+                    <p class="small text-muted mb-0">Green Line - Eco Station (2 min walk)</p>
+                </div>
+                <div class="mb-3">
+                    <h6 class="fw-bold">
+                        <i class="fas fa-bicycle me-2 text-success"></i>By Bike
+                    </h6>
+                    <p class="small text-muted mb-0">Bike racks available at entrance</p>
+                </div>
+                <div class="alert alert-success">
+                    <small>
+                        <i class="fas fa-leaf me-1"></i>
+                        <strong>Eco-Tip:</strong> Use sustainable transport to visit us!
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <h3 class="fw-bold text-success mb-4 text-center">
+            <i class="fas fa-question-circle me-3"></i>Frequently Asked Questions
+        </h3>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="faq-item">
+                    <h6 class="fw-bold text-success mb-2">How do I list a product?</h6>
+                    <p class="text-muted small mb-0">Simply create an account, click "Sell Product" in the navigation, and fill out the product details form. It's that easy!</p>
+                </div>
+                <div class="faq-item">
+                    <h6 class="fw-bold text-success mb-2">Is my payment information secure?</h6>
+                    <p class="text-muted small mb-0">Yes! We use industry-standard encryption and never store your payment details on our servers.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="faq-item">
+                    <h6 class="fw-bold text-success mb-2">What makes a product "eco-friendly"?</h6>
+                    <p class="text-muted small mb-0">We focus on sustainable, reusable, recycled, or environmentally conscious products that help reduce waste.</p>
+                </div>
+                <div class="faq-item">
+                    <h6 class="fw-bold text-success mb-2">How do I contact a seller?</h6>
+                    <p class="text-muted small mb-0">Click "Contact Seller" on any product page to send a direct message through our secure messaging system.</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'core:home' %}" class="btn btn-outline-success">
+                <i class="fas fa-question-circle me-2"></i>View All FAQs
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contactForm');
+    const messageTextarea = document.getElementById('message');
+    
+    // Auto-resize textarea
+    messageTextarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
+    
+    // Form submission handling
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = new FormData(this);
+        const name = formData.get('name');
+        const email = formData.get('email');
+        const subject = formData.get('subject');
+        const message = formData.get('message');
+        const category = formData.get('subject_category');
+        
+        // Basic validation
+        if (!name || !email || !subject || !message || !category) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        
+        if (!isValidEmail(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+        
+        if (message.length < 10) {
+            alert('Please provide a more detailed message (at least 10 characters).');
+            return;
+        }
+        
+        // Submit form
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+        submitBtn.disabled = true;
+        
+        // Simulate form submission (replace with actual AJAX call)
+        setTimeout(() => {
+            alert('Thank you for your message! We\'ll get back to you within 24 hours.');
+            this.reset();
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }, 2000);
+    });
+    
+    // Email validation function
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    // Character counter for message
+    messageTextarea.addEventListener('input', function() {
+        const maxLength = 1000;
+        const currentLength = this.value.length;
+        let counter = this.parentNode.querySelector('.char-counter');
+        
+        if (!counter) {
+            counter = document.createElement('div');
+            counter.className = 'char-counter form-text text-end';
+            this.parentNode.appendChild(counter);
+        }
+        
+        counter.textContent = `${currentLength}/${maxLength} characters`;
+        
+        if (currentLength > maxLength * 0.9) {
+            counter.style.color = '#dc3545';
+        } else if (currentLength > maxLength * 0.8) {
+            counter.style.color = '#ffc107';
+        } else {
+            counter.style.color = '#6c757d';
+        }
+    });
+    
+    // Subject category change handler
+    document.getElementById('subject_category').addEventListener('change', function() {
+        const subjectInput = document.getElementById('subject');
+        const value = this.value;
+        
+        // Auto-fill subject based on category
+        const subjects = {
+            'general': 'General Inquiry - ',
+            'support': 'Technical Support Needed - ',
+            'billing': 'Billing Question - ',
+            'partnership': 'Partnership Opportunity - ',
+            'sustainability': 'Sustainability Question - ',
+            'feedback': 'Feedback & Suggestions - ',
+            'report': 'Issue Report - ',
+            'other': 'Other - '
+        };
+        
+        if (subjects[value] && !subjectInput.value) {
+            subjectInput.value = subjects[value];
+            subjectInput.focus();
+            subjectInput.setSelectionRange(subjects[value].length, subjects[value].length);
+        }
+    });
+    
+    // Smooth scroll to form on page load if there's a hash
+    if (window.location.hash === '#contact-form') {
+        document.getElementById('contactForm').scrollIntoView({ 
+            behavior: 'smooth' 
+        });
+    }
+});
+</script>
+{% endblock %}

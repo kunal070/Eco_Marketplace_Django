@@ -14,6 +14,7 @@ urlpatterns = [
     path('edit/<int:pk>/', views.ProductUpdateView.as_view(), name='product_edit'),
     path('delete/<int:pk>/', views.ProductDeleteView.as_view(), name='product_delete'),
     path('my-products/', views.MyProductsView.as_view(), name='my_products'),
+    path('my-favorites/', views.MyFavoritesView.as_view(), name='my_favorites'),  # ADD THIS LINE
 
     # Category and search
     path('categories/', views.CategoryListView.as_view(), name='category_list'),
@@ -21,4 +22,5 @@ urlpatterns = [
     
     # AJAX endpoints
     path('<int:product_id>/toggle-favorite/', views.toggle_favorite, name='toggle_favorite'),
+    path('<int:product_id>/mark-sold/', views.mark_as_sold, name='mark_as_sold'),
 ]

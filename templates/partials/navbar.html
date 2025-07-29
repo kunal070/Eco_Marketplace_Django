@@ -1,99 +1,175 @@
-{% load static %}
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+<!-- templates/partials/navbar.html -->
+<nav class="navbar navbar-expand-lg navbar-light bg-success shadow-sm">
     <div class="container">
-        <!-- Logo/Brand -->
-        <a class="navbar-brand d-flex align-items-center" href="{% url 'core:home' %}">
-            <i class="fas fa-leaf me-2 text-light"></i>
-            <span class="fw-bold">EcoMarket</span>
+        <!-- Brand -->
+        <a class="navbar-brand text-white fw-bold" href="{% url 'core:home' %}">
+            <i class="fas fa-leaf me-2"></i>
+            EcoMarketplace
         </a>
 
-        <!-- Mobile Toggle Button -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" 
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" 
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <!-- Navigation Items -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <!-- Search Bar (Center) -->
-            <div class="mx-auto d-lg-flex d-none">
-                <form class="d-flex" method="GET" action="{% url 'products:search_results' %}" style="width: 400px;">
-                    <input class="form-control rounded-pill" type="search" placeholder="Search eco-friendly products..."
-                           aria-label="Search" name="q" autocomplete="off" spellcheck="false">
-                </form>
-            </div>
-
-            <!-- Right Side Navigation -->
-            <ul class="navbar-nav ms-auto">
-                <!-- Product Link -->
+            <!-- Left Navigation -->
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'products:product_list' %}">
-                        <i class="fas fa-shopping-bag me-1"></i> Product
+                    <a class="nav-link text-white" href="{% url 'core:home' %}">
+                        <i class="fas fa-home me-1"></i>Home
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'products:product_list' %}">
+                        <i class="fas fa-box me-1"></i>Products
                     </a>
                 </li>
 
-                <!-- Blog -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'blog:green_tips' %}">
-                        <i class="fas fa-leaf me-1"></i> Green Tips
+                <!-- Categories Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="categoriesDropdown" 
+                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-tags me-1"></i>Categories
                     </a>
-                </li>
-
-                <!-- Reviews -->
-                {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'reviews:user_reviews' %}">
-                        <i class="fas fa-star me-1"></i> My Reviews
-                    </a>
-                </li>
-                {% endif %}
-
-                <!-- Messaging -->
-                {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'messaging:inbox' %}">
-                        <i class="fas fa-envelope me-1"></i> Messages
-                    </a>
-                </li>
-                {% endif %}
-
-                <!-- About -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'core:about' %}">About</a>
-                </li>
-
-                <!-- Contact -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'core:contact' %}">Contact</a>
-                </li>
-
-                <!-- User Authentication -->
-                {% if user.is_authenticated %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-1"></i> {{ user.username }}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="{% url 'authentication:profile' %}"><i class="fas fa-user me-2"></i> Profile</a></li>
-                            <li><a class="dropdown-item" href="{% url 'products:product_create' %}"><i class="fas fa-plus me-2"></i> Sell Product</a></li>
-                            <li><a class="dropdown-item" href="{% url 'products:my_products' %}"><i class="fas fa-box me-2"></i> My Products</a></li>
-                            <li><a class="dropdown-item" href="{% url 'analytics:dashboard' %}"><i class="fas fa-chart-bar me-2"></i> Analytics</a></li>
-                            <li><a class="dropdown-item" href="{% url 'analytics:user_history' %}"><i class="fas fa-history me-2"></i> Visit History</a></li>
+                    <ul class="dropdown-menu border-0 shadow-lg" aria-labelledby="categoriesDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'products:category_list' %}">
+                                <i class="fas fa-th-large me-2"></i>All Categories
+                            </a>
+                        </li>
+                        {% if global_categories %}
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'authentication:logout' %}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                            {% for category in global_categories %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'products:category_detail' category.slug %}">
+                                    <i class="fas fa-tag me-2 text-success"></i>
+                                    {{ category.name }}
+                                    <span class="badge bg-light text-dark ms-2">{{ category.get_products_count }}</span>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'core:about' %}">
+                        <i class="fas fa-info-circle me-1"></i>About
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'core:contact' %}">
+                        <i class="fas fa-envelope me-1"></i>Contact
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Search Bar -->
+            <form class="d-flex me-3" method="get" action="{% url 'products:search_results' %}">
+                <div class="input-group">
+                    <input class="form-control border-0" type="search" name="q" 
+                           placeholder="Search eco products..." aria-label="Search"
+                           value="{{ request.GET.q }}">
+                    <button class="btn btn-light" type="submit">
+                        <i class="fas fa-search text-success"></i>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Right Navigation -->
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <!-- Sell Product Button -->
+                    <li class="nav-item me-2">
+                        <a class="btn btn-warning text-dark fw-bold" href="{% url 'products:product_create' %}">
+                            <i class="fas fa-plus me-1"></i>Sell
+                        </a>
+                    </li>
+
+                    <!-- Favorites Link -->
+                    <li class="nav-item">
+                        <a class="nav-link text-white position-relative" href="{% url 'products:my_favorites' %}">
+                            <i class="fas fa-heart me-1"></i>Favorites
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+                                  style="font-size: 0.6rem;" id="favoritesCount">
+                                <!-- Will be populated by JavaScript -->
+                            </span>
+                        </a>
+                    </li>
+
+                    <!-- Messages Link -->
+                    <li class="nav-item">
+                        <a class="nav-link text-white position-relative" href="{% url 'messaging:inbox' %}">
+                            <i class="fas fa-comment me-1"></i>Messages
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+                                  style="font-size: 0.6rem;" id="messagesCount">
+                                <!-- Will be populated by JavaScript -->
+                            </span>
+                        </a>
+                    </li>
+
+                    <!-- User Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" 
+                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-1"></i>{{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'authentication:profile' %}">
+                                    <i class="fas fa-user-circle me-2 text-success"></i>My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'products:my_products' %}">
+                                    <i class="fas fa-box me-2 text-primary"></i>My Products
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'products:my_favorites' %}">
+                                    <i class="fas fa-heart me-2 text-danger"></i>My Favorites
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'messaging:inbox' %}">
+                                    <i class="fas fa-envelope me-2 text-info"></i>Messages
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'reviews:user_reviews' %}">
+                                    <i class="fas fa-star me-2 text-warning"></i>My Reviews
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'analytics:dashboard' %}">
+                                    <i class="fas fa-chart-bar me-2 text-secondary"></i>Dashboard
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{% url 'authentication:logout' %}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 {% else %}
+                    <!-- Login/Register for Anonymous Users -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'authentication:login' %}">
-                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        <a class="nav-link text-white" href="{% url 'authentication:login' %}">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-warning text-dark fw-bold px-3 py-2 ms-2 rounded-pill" href="{% url 'authentication:register' %}">
-                            <i class="fas fa-user-plus me-1"></i> Register
+                        <a class="btn btn-warning text-dark fw-bold" href="{% url 'authentication:register' %}">
+                            <i class="fas fa-user-plus me-1"></i>Register
                         </a>
                     </li>
                 {% endif %}
@@ -101,3 +177,125 @@
         </div>
     </div>
 </nav>
+
+<!-- Add some custom CSS for better navbar styling -->
+<style>
+.navbar .dropdown-menu {
+    border-radius: 12px;
+    padding: 8px 0;
+    margin-top: 8px;
+}
+
+.navbar .dropdown-item {
+    padding: 12px 20px;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 2px 8px;
+}
+
+.navbar .dropdown-item:hover {
+    background-color: #f8f9fa;
+    transform: translateX(4px);
+}
+
+.navbar .dropdown-item:active {
+    background-color: #e9ecef;
+}
+
+.navbar .form-control {
+    border-radius: 25px 0 0 25px;
+    border: none;
+    padding: 8px 16px;
+}
+
+.navbar .form-control:focus {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.navbar .btn-light {
+    border-radius: 0 25px 25px 0;
+    border: none;
+    padding: 8px 16px;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+.navbar .badge {
+    font-size: 0.6rem !important;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hide empty badges */
+.navbar .badge:empty {
+    display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    .navbar .form-control {
+        border-radius: 25px;
+        margin: 8px 0;
+    }
+    
+    .navbar .btn-light {
+        border-radius: 25px;
+        margin: 8px 0;
+    }
+    
+    .navbar .btn-warning {
+        margin: 8px 0;
+        text-align: center;
+    }
+}
+</style>
+
+<script>
+// Update notification counts on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateNotificationCounts();
+});
+
+function updateNotificationCounts() {
+    // Update favorites count
+    {% if user.is_authenticated %}
+    fetch('/api/favorites/count/')
+        .then(response => response.json())
+        .then(data => {
+            const favoritesCount = document.getElementById('favoritesCount');
+            if (data.count > 0) {
+                favoritesCount.textContent = data.count > 99 ? '99+' : data.count;
+                favoritesCount.style.display = 'flex';
+            } else {
+                favoritesCount.style.display = 'none';
+            }
+        })
+        .catch(error => console.log('Favorites count update failed'));
+
+    // Update messages count
+    fetch('/api/messages/unread-count/')
+        .then(response => response.json())
+        .then(data => {
+            const messagesCount = document.getElementById('messagesCount');
+            if (data.count > 0) {
+                messagesCount.textContent = data.count > 99 ? '99+' : data.count;
+                messagesCount.style.display = 'flex';
+            } else {
+                messagesCount.style.display = 'none';
+            }
+        })
+        .catch(error => console.log('Messages count update failed'));
+    {% endif %}
+}
+
+// Update counts when favorites are toggled
+document.addEventListener('favoriteToggled', function() {
+    updateNotificationCounts();
+});
+</script>

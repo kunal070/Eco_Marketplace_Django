@@ -7,6 +7,16 @@ from django.db.models import Q, Avg, Count
 from .models import Product, Category, ProductImage, ProductFavorite
 from .forms import ProductForm, ProductSearchForm
 
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 class ProductListView(ListView):
     """
@@ -82,7 +92,6 @@ class ProductListView(ListView):
         
         return context
 
-
 class ProductDetailView(DetailView):
     """
     Display individual product details
@@ -122,7 +131,6 @@ class ProductDetailView(DetailView):
         context['page_title'] = product.title
         return context
 
-
 class CategoryDetailView(ListView):
     """
     Display products in a specific category
@@ -145,7 +153,6 @@ class CategoryDetailView(ListView):
         context['category'] = self.category
         context['page_title'] = f'Products in {self.category.name}'
         return context
-
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     """
@@ -170,7 +177,6 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         messages.success(self.request, 'Your product has been listed successfully!')
         return super().form_valid(form)
-
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
     """
@@ -201,7 +207,6 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('products:product_detail', kwargs={'pk': self.object.pk})
 
-
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'products/product_confirm_delete.html'
@@ -213,7 +218,6 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, 'Your product has been deleted successfully!')
         return super().delete(request, *args, **kwargs)
-
 
 class MyProductsView(LoginRequiredMixin, ListView):
     model = Product
@@ -229,7 +233,6 @@ class MyProductsView(LoginRequiredMixin, ListView):
         context['page_title'] = 'My Products'
         return context
 
-
 class CategoryListView(ListView):
     model = Category
     template_name = 'products/category_list.html'
@@ -243,7 +246,6 @@ class CategoryListView(ListView):
         context = super().get_context_data(**kwargs)
         context['page_title'] = 'Browse Categories'
         return context
-
 
 class SearchResultsView(ListView):
     model = Product
@@ -292,12 +294,40 @@ class SearchResultsView(ListView):
         context['page_title'] = 'Search Results'
         return context
 
+class MyFavoritesView(LoginRequiredMixin, ListView):
+    """
+    Display user's favorite products
+    """
+    model = Product
+    template_name = 'products/my_favorites.html'
+    context_object_name = 'products'
+    paginate_by = 12
 
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
+    def get_queryset(self):
+        # Get products that the user has favorited
+        favorite_products = ProductFavorite.objects.filter(
+            user=self.request.user
+        ).values_list('product_id', flat=True)
+        
+        return Product.objects.filter(
+            id__in=favorite_products,
+            is_active=True,
+            is_approved=True
+        ).select_related('category', 'seller').prefetch_related('images').annotate(
+            average_rating=Avg('reviews__rating'),
+            review_count=Count('reviews')
+        ).order_by('-created_at')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'My Favorites'
+        context['favorites_count'] = self.get_queryset().count()
+        
+        # Mark all as favorited since this is favorites page
+        for product in context['products']:
+            product.is_favorited_by_user = True
+            
+        return context
 
 @require_POST
 def toggle_favorite(request, product_id):
@@ -324,3 +354,32 @@ def toggle_favorite(request, product_id):
     
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)})
+
+@login_required
+@require_POST
+def mark_as_sold(request, product_id):
+    """
+    AJAX endpoint to mark a product as sold/unsold
+    """
+    try:
+        product = get_object_or_404(Product, pk=product_id, seller=request.user)
+        
+        # Toggle the active status
+        product.is_active = not product.is_active
+        product.save(update_fields=['is_active'])
+        
+        status = 'available' if product.is_active else 'sold'
+        message = f'Product marked as {status}'
+        
+        return JsonResponse({
+            'status': 'success',
+            'action': status,
+            'message': message,
+            'is_active': product.is_active
+        })
+    
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)

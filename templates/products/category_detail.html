@@ -1,0 +1,460 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} - Eco Marketplace{% endblock %}
+
+{% block extra_css %}
+<style>
+    .category-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border-radius: 16px;
+        padding: 48px 32px;
+        margin-bottom: 32px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .category-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+        animation: float 20s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .category-icon {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        margin: 0 auto 24px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 32px;
+    }
+    
+    .breadcrumb-item a {
+        color: #28a745;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #20c997;
+    }
+    
+    .filter-bar {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 24px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .results-count {
+        font-weight: 600;
+        color: #28a745;
+    }
+    
+    .sort-select {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        padding: 8px 16px;
+        font-weight: 500;
+    }
+    
+    .sort-select:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 12px 24px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+    }
+    
+    .empty-icon {
+        background: #f8f9fa;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+    }
+    
+    .category-stats {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        padding: 16px;
+        backdrop-filter: blur(10px);
+        display: inline-block;
+        margin-top: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'core:home' %}">
+                    <i class="fas fa-home me-1"></i>Home
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'products:product_list' %}">Products</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'products:category_list' %}">Categories</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+        </ol>
+    </nav>
+
+    <!-- Category Header -->
+    <div class="category-header">
+        <div class="position-relative">
+            <div class="category-icon">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h1 class="h2 mb-3 fw-bold">{{ category.name }}</h1>
+            {% if category.description %}
+                <p class="fs-5 mb-3 opacity-90">{{ category.description }}</p>
+            {% endif %}
+            <div class="category-stats">
+                <i class="fas fa-box me-2"></i>
+                {{ products|length }} product{{ products|length|pluralize }} available
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <span class="results-count">
+                    {{ products|length }} product{{ products|length|pluralize }} in {{ category.name }}
+                </span>
+            </div>
+            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                <div class="d-flex gap-3 justify-content-md-end">
+                    <!-- Sort Dropdown -->
+                    <select class="form-select sort-select d-inline-block w-auto" id="sortSelect">
+                        <option value="">Sort by</option>
+                        <option value="newest">Newest First</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="popular">Most Popular</option>
+                    </select>
+                    
+                    <!-- View Toggle -->
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-secondary active" id="gridView">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" id="listView">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if products %}
+        <!-- Products Grid -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4" id="productsGrid">
+            {% for product in products %}
+            <div class="col">
+                {% include 'partials/product_card.html' with product=product %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav aria-label="Category products pagination" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+    {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-box-open fa-4x text-muted"></i>
+            </div>
+            <h3 class="text-muted mb-3">No products in this category yet</h3>
+            <p class="text-muted mb-4 fs-5">
+                Be the first to list a product in {{ category.name }}!<br>
+                Help build our eco-friendly marketplace.
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{% url 'products:product_create' %}" class="btn btn-success btn-lg">
+                    <i class="fas fa-plus me-2"></i>List Your Product
+                </a>
+                <a href="{% url 'products:product_list' %}" class="btn btn-outline-success btn-lg">
+                    <i class="fas fa-search me-2"></i>Browse All Products
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Related Categories -->
+    {% if category.parent %}
+        <div class="mt-5">
+            <h4 class="fw-bold text-success mb-4">
+                <i class="fas fa-tags me-2"></i>Related Categories
+            </h4>
+            <div class="row row-cols-2 row-cols-md-4 g-3">
+                {% for sibling in category.parent.children.all %}
+                    {% if sibling != category %}
+                    <div class="col">
+                        <a href="{% url 'products:category_detail' sibling.slug %}" 
+                           class="card text-decoration-none category-link">
+                            <div class="card-body text-center p-3">
+                                <i class="fas fa-tag fa-2x text-success mb-2"></i>
+                                <h6 class="card-title mb-1">{{ sibling.name }}</h6>
+                                <small class="text-muted">{{ sibling.products.count }} products</small>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% elif category.children.exists %}
+        <div class="mt-5">
+            <h4 class="fw-bold text-success mb-4">
+                <i class="fas fa-sitemap me-2"></i>Subcategories
+            </h4>
+            <div class="row row-cols-2 row-cols-md-4 g-3">
+                {% for child in category.children.all %}
+                <div class="col">
+                    <a href="{% url 'products:category_detail' child.slug %}" 
+                       class="card text-decoration-none category-link">
+                        <div class="card-body text-center p-3">
+                            <i class="fas fa-folder fa-2x text-success mb-2"></i>
+                            <h6 class="card-title mb-1">{{ child.name }}</h6>
+                            <small class="text-muted">{{ child.products.count }} products</small>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Sort functionality
+    $('#sortSelect').change(function() {
+        const sortValue = $(this).val();
+        if (sortValue) {
+            const currentUrl = new URL(window.location);
+            currentUrl.searchParams.set('sort', sortValue);
+            window.location.href = currentUrl.toString();
+        }
+    });
+
+    // View toggle functionality
+    $('#listView').click(function() {
+        $(this).addClass('active');
+        $('#gridView').removeClass('active');
+        
+        // Change grid to list view
+        $('#productsGrid').removeClass('row-cols-md-2 row-cols-lg-3 row-cols-xl-4')
+                          .addClass('row-cols-1');
+        
+        // Modify product cards for list view
+        $('.product-card').each(function() {
+            $(this).addClass('flex-md-row');
+            $(this).find('.card-img-top').addClass('flex-shrink-0')
+                   .css({'width': '200px', 'height': '150px'});
+        });
+    });
+
+    $('#gridView').click(function() {
+        $(this).addClass('active');
+        $('#listView').removeClass('active');
+        
+        // Change back to grid view
+        $('#productsGrid').removeClass('row-cols-1')
+                          .addClass('row-cols-md-2 row-cols-lg-3 row-cols-xl-4');
+        
+        // Reset product cards
+        $('.product-card').each(function() {
+            $(this).removeClass('flex-md-row');
+            $(this).find('.card-img-top').removeClass('flex-shrink-0')
+                   .css({'width': 'auto', 'height': '220px'});
+        });
+    });
+
+    // Favorite button functionality
+    $('.favorite-btn').click(function() {
+        const btn = $(this);
+        const productId = btn.data('product-id');
+        const isFavorited = btn.data('favorited');
+        
+        $.ajax({
+            url: `/products/${productId}/toggle-favorite/`,
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    const icon = btn.find('i');
+                    if (response.action === 'added') {
+                        icon.removeClass('far').addClass('fas text-danger');
+                        btn.data('favorited', true);
+                        showNotification('💚 Added to favorites!', 'success');
+                    } else {
+                        icon.removeClass('fas text-danger').addClass('far');
+                        btn.data('favorited', false);
+                        showNotification('💔 Removed from favorites', 'info');
+                    }
+                }
+            }
+        });
+    });
+});
+
+// Notification function
+function showNotification(message, type = 'info', duration = 3000) {
+    const notification = $(`
+        <div class="alert alert-${type} alert-dismissible fade show position-fixed" 
+             style="top: 20px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `);
+    
+    $('body').append(notification);
+    
+    setTimeout(function() {
+        notification.fadeOut();
+    }, duration);
+}
+</script>
+
+<style>
+.category-link {
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+}
+
+.category-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-color: #28a745;
+    text-decoration: none;
+}
+
+.category-link .card-body {
+    transition: all 0.3s ease;
+}
+
+.category-link:hover .card-body {
+    background-color: #f8f9fa;
+}
+
+.pagination .page-link {
+    border-radius: 8px;
+    margin: 0 2px;
+    border: 2px solid #e9ecef;
+    color: #28a745;
+    font-weight: 600;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border-color: #28a745;
+}
+</style>
+{% endblock %}

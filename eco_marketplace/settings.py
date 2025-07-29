@@ -163,7 +163,7 @@ INTERNAL_IPS = [
 ]
 
 # Session Configuration
-SESSION_COOKIE_AGE = 86400  # 24 hours
+SESSION_COOKIE_AGE = 1800  # 30 minutes
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
 
@@ -185,3 +185,6 @@ LOGIN_REDIRECT_URL = '/auth/profile/'  # or use reverse('authentication:profile'
 TWILIO_ACCOUNT_SID_REMOVED_REMOVED_REMOVED = os.getenv("TWILIO_ACCOUNT_SID_REMOVED_REMOVED_REMOVED")
 TWILIO_AUTH_TOKEN_REMOVED_REMOVED_REMOVED = os.getenv("TWILIO_AUTH_TOKEN_REMOVED_REMOVED_REMOVED")
 TWILIO_PHONE_NUMBER_REMOVED = os.getenv("TWILIO_PHONE_NUMBER_REMOVED")
+
+# Use database-backed sessions (default)
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'

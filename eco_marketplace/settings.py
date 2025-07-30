@@ -84,7 +84,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'apps.core.context_processors.global_context', 
+                'apps.core.context_processors.global_context',
+                'apps.analytics.context_processors.analytics_counts', 
             ],
         },
     },
@@ -180,6 +181,8 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Login redirect
 LOGIN_REDIRECT_URL = '/auth/profile/'  # or use reverse('authentication:profile')
+LOGIN_URL = '/auth/login/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Twilio Configuration for Messaging
 TWILIO_ACCOUNT_SID_REMOVED_REMOVED_REMOVED = os.getenv("TWILIO_ACCOUNT_SID_REMOVED_REMOVED_REMOVED")

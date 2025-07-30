@@ -1,0 +1,653 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - Product Reviews{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
+<style>
+    /* Professional Reviews Styling */
+    .rating-stars {
+        color: #ffc107;
+        font-size: 1.1rem;
+    }
+
+    .rating-bar {
+        height: 10px;
+        background-color: #e9ecef;
+        border-radius: 6px;
+        overflow: hidden;
+        margin: 0 12px;
+    }
+
+    .rating-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ffc107, #ff8f00);
+        transition: width 0.3s ease;
+        border-radius: 6px;
+    }
+
+    .review-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .review-card:hover {
+        border-left-color: var(--primary-green);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .review-card.user-review {
+        border-left-color: var(--primary-green);
+        background: linear-gradient(135deg, #f8f9fa, #e8f5e9);
+    }
+
+    .helpful-btn {
+        transition: all 0.3s ease;
+        border-radius: 20px;
+        padding: 6px 16px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .helpful-btn.active {
+        background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        color: white;
+        border: none;
+    }
+
+    .helpful-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 32px;
+    }
+
+    .product-info-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+        margin-bottom: 24px;
+    }
+
+    .rating-summary-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+        height: 100%;
+    }
+
+    .rating-header {
+        background: linear-gradient(135deg, #ffc107, #ff8f00);
+        color: white;
+        padding: 20px 24px;
+        border: none;
+    }
+
+    .filters-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+        margin-bottom: 24px;
+    }
+
+    .btn {
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 12px 24px;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .btn-sm {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        border: none;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #ffc107, #ff8f00);
+        border: none;
+        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+        color: white;
+    }
+
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
+        color: white;
+    }
+
+    .btn-outline-success {
+        border: 2px solid var(--primary-green);
+        color: var(--primary-green);
+        background: transparent;
+    }
+
+    .btn-outline-success:hover {
+        background: var(--primary-green);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-green);
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+        outline: none;
+    }
+
+    .reviewer-avatar {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .review-header {
+        display: flex;
+        justify-content-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+    }
+
+    .review-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .review-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+    }
+
+    .review-content {
+        color: #6c757d;
+        line-height: 1.6;
+        margin-bottom: 16px;
+    }
+
+    .review-footer {
+        display: flex;
+        justify-content-between;
+        align-items: center;
+        padding-top: 16px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .review-date {
+        color: #adb5bd;
+        font-size: 0.875rem;
+    }
+
+    .average-rating {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #ffc107;
+        text-shadow: 0 2px 4px rgba(255, 193, 7, 0.2);
+    }
+
+    .rating-distribution {
+        margin-top: 24px;
+    }
+
+    .rating-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .rating-label {
+        width: 80px;
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+
+    .rating-percentage {
+        width: 50px;
+        text-align: right;
+        font-size: 0.875rem;
+        color: #6c757d;
+        font-weight: 600;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-state-icon {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        color: #adb5bd;
+    }
+
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 16px;
+    }
+
+    .breadcrumb-item a {
+        color: var(--primary-green);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .breadcrumb-item a:hover {
+        color: var(--secondary-green);
+    }
+
+    .verified-badge {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border-radius: 12px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .featured-badge {
+        background: linear-gradient(135deg, #ffc107, #ff8f00);
+        color: white;
+        border-radius: 12px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'core:home' %}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'products:product_list' %}">Products</a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ product.title }}</li>
+                        <li class="breadcrumb-item active">Reviews</li>
+                    </ol>
+                </nav>
+                <h1 class="fw-bold text-success mb-2">
+                    <i class="fas fa-star me-3"></i>Product Reviews
+                </h1>
+                <p class="text-muted mb-0 fs-5">{{ product.title }}</p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                {% if user.is_authenticated and user_can_review %}
+                    <a href="{% url 'reviews:add_review' product.pk %}" class="btn btn-success btn-lg">
+                        <i class="fas fa-plus me-2"></i>Write Review
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Info Card -->
+    <div class="product-info-card">
+        <div class="row align-items-center">
+            <div class="col-md-2">
+                <div class="bg-success text-white rounded d-flex align-items-center justify-content-center" 
+                     style="height: 80px; border-radius: 12px;">
+                    <i class="fas fa-box fa-2x"></i>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h5 class="mb-1 fw-bold">{{ product.title }}</h5>
+                <p class="text-muted mb-0">{{ product.description|truncatechars:100 }}</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'products:product_detail' product.pk %}" class="btn btn-outline-success">
+                    <i class="fas fa-eye me-2"></i>View Product
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Rating Summary -->
+        <div class="col-lg-4 mb-4">
+            <div class="rating-summary-card">
+                <div class="rating-header">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-chart-bar me-2"></i>Rating Summary
+                    </h5>
+                </div>
+                <div class="card-body text-center p-4">
+                    {% if rating_summary.total_reviews > 0 %}
+                        <div class="mb-4">
+                            <div class="average-rating mb-2">{{ rating_summary.average_rating }}</div>
+                            <div class="rating-stars mb-3">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= rating_summary.average_rating %}
+                                        <i class="fas fa-star"></i>
+                                    {% elif forloop.counter <= rating_summary.average_rating|add:0.5 %}
+                                        <i class="fas fa-star-half-alt"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <p class="text-muted fw-bold">Based on {{ rating_summary.total_reviews }} review{{ rating_summary.total_reviews|pluralize }}</p>
+                        </div>
+
+                        <!-- Rating Distribution -->
+                        <div class="rating-distribution">
+                            {% for rating, percentage in rating_distribution.items reversed %}
+                                <div class="rating-row">
+                                    <span class="rating-label">{{ rating }} star{{ rating|pluralize }}</span>
+                                    <div class="rating-bar flex-grow-1">
+                                        <div class="rating-fill" style="width: {{ percentage }}%"></div>
+                                    </div>
+                                    <span class="rating-percentage">{{ percentage }}%</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-star fa-3x"></i>
+                            </div>
+                            <h5 class="text-muted mb-3">No reviews yet</h5>
+                            <p class="text-muted mb-4">Be the first to review this product!</p>
+                            {% if user.is_authenticated and user_can_review %}
+                                <a href="{% url 'reviews:add_review' product.pk %}" class="btn btn-warning">
+                                    <i class="fas fa-plus me-2"></i>Write First Review
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews List -->
+        <div class="col-lg-8">
+            <!-- Filters -->
+            <div class="filters-card">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Rating</label>
+                        {{ filter_form.rating }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Sort By</label>
+                        {{ filter_form.sort_by }}
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-outline-success w-100">
+                            <i class="fas fa-filter me-2"></i>Apply Filters
+                        </button>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            {{ filter_form.verified_only }}
+                            <label class="form-check-label fw-bold" for="{{ filter_form.verified_only.id_for_label }}">
+                                Show verified purchases only
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- User's Review (if exists) -->
+            {% if user_review %}
+                <div class="review-card user-review">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0 fw-bold">
+                            <i class="fas fa-user me-2"></i>Your Review
+                        </h6>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="review-header">
+                            <div class="review-meta">
+                                <div class="reviewer-avatar">
+                                    {{ user_review.reviewer.username|first|upper }}
+                                </div>
+                                <div>
+                                    <div class="rating-stars mb-1">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= user_review.rating %}
+                                                <i class="fas fa-star"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <h6 class="review-title mb-0">{{ user_review.title }}</h6>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                {% if user_review.is_verified_purchase %}
+                                    <span class="verified-badge">Verified</span>
+                                {% endif %}
+                                {% if user_review.is_featured %}
+                                    <span class="featured-badge">Featured</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="review-content">
+                            {{ user_review.content|linebreaks }}
+                        </div>
+                        
+                        <div class="review-footer">
+                            <div class="d-flex align-items-center gap-3">
+                                <button class="btn helpful-btn {% if user_review.is_helpful_by_user %}active{% endif %}"
+                                        data-review-id="{{ user_review.pk }}">
+                                    <i class="fas fa-thumbs-up me-1"></i>
+                                    Helpful ({{ user_review.helpful_count }})
+                                </button>
+                                <span class="review-date">
+                                    <i class="fas fa-clock me-1"></i>
+                                    {{ user_review.created_at|timesince }} ago
+                                </span>
+                            </div>
+                            <div>
+                                <a href="{% url 'reviews:edit_review' user_review.pk %}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-edit me-1"></i>Edit
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Other Reviews -->
+            {% if reviews %}
+                {% for review in reviews %}
+                <div class="review-card">
+                    <div class="card-body p-4">
+                        <div class="review-header">
+                            <div class="review-meta">
+                                <div class="reviewer-avatar">
+                                    {{ review.reviewer.username|first|upper }}
+                                </div>
+                                <div>
+                                    <div class="rating-stars mb-1">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}
+                                                <i class="fas fa-star"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <h6 class="review-title mb-0">{{ review.title }}</h6>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                {% if review.is_verified_purchase %}
+                                    <span class="verified-badge">Verified</span>
+                                {% endif %}
+                                {% if review.is_featured %}
+                                    <span class="featured-badge">Featured</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="review-content">
+                            {{ review.content|linebreaks }}
+                        </div>
+                        
+                        <div class="review-footer">
+                            <div class="d-flex align-items-center gap-3">
+                                <button class="btn helpful-btn {% if review.is_helpful_by_user %}active{% endif %}"
+                                        data-review-id="{{ review.pk }}">
+                                    <i class="fas fa-thumbs-up me-1"></i>
+                                    Helpful ({{ review.helpful_count }})
+                                </button>
+                                <span class="review-date">
+                                    <i class="fas fa-clock me-1"></i>
+                                    {{ review.created_at|timesince }} ago
+                                </span>
+                            </div>
+                            <div>
+                                <a href="{% url 'reviews:report_review' review.pk %}" class="btn btn-outline-danger btn-sm">
+                                    <i class="fas fa-flag me-1"></i>Report
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <nav aria-label="Reviews pagination" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item active">
+                            <span class="page-link">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+
+            {% else %}
+                <!-- No Reviews Found -->
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-search fa-3x"></i>
+                    </div>
+                    <h5 class="text-muted mb-3">No reviews found</h5>
+                    <p class="text-muted mb-4">Try adjusting your filters or be the first to review this product.</p>
+                    {% if user.is_authenticated and user_can_review %}
+                        <a href="{% url 'reviews:add_review' product.pk %}" class="btn btn-success btn-lg">
+                            <i class="fas fa-plus me-2"></i>Write First Review
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Helpful button functionality
+    $('.helpful-btn').click(function() {
+        const btn = $(this);
+        const reviewId = btn.data('review-id');
+        const isActive = btn.hasClass('active');
+        
+        $.ajax({
+            url: '/reviews/toggle-helpful/',
+            method: 'POST',
+            data: {
+                review_id: reviewId,
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    if (response.action === 'added') {
+                        btn.addClass('active');
+                        const count = parseInt(btn.text().match(/\d+/)[0]) + 1;
+                        btn.html(`<i class="fas fa-thumbs-up me-1"></i>Helpful (${count})`);
+                    } else {
+                        btn.removeClass('active');
+                        const count = parseInt(btn.text().match(/\d+/)[0]) - 1;
+                        btn.html(`<i class="fas fa-thumbs-up me-1"></i>Helpful (${count})`);
+                    }
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

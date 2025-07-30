@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Eco-Friendly Marketplace - Buy, sell, and discover sustainable products for a greener future.">
+    <meta name="keywords" content="eco-friendly, sustainable, marketplace, green products, environment">
+
+    <title>{% block title %}{{ page_title|default:"Eco-Friendly Marketplace" }}{% endblock %}</title>
+
+    {% load static %}
+    {% load django_bootstrap5 %}
+
+    <!-- Bootstrap CSS -->
+    {% bootstrap_css %}
+
+    <!-- Custom CSS -->
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+</head>
+<body class="bg-light">
+    <!-- Navigation Bar -->
+    {% include 'partials/navbar.html' %}
+
+    <!-- Messages/Alerts -->
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Welcome to Eco-Friendly Marketplace</h1>
+                    <p>Default content - this should be overridden in child templates.</p>
+                </div>
+            </div>
+        </div>
+        {% endblock content %}
+    </main>
+
+    <!-- Footer -->
+    {% include 'partials/footer.html' %}
+
+    <!-- jQuery (Required for AJAX functionality) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
+    <!-- Bootstrap JS -->
+    {% bootstrap_javascript %}
+
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

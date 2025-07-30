@@ -1,0 +1,705 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title|default:"Products" }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Professional Product List Styling */
+    .product-card {
+        transition: all 0.3s ease;
+        height: 100%;
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        border-color: #28a745;
+    }
+    
+    .product-image {
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        background-color: #f8f9fa;
+    }
+    
+    .product-card:hover .product-image {
+        transform: scale(1.05);
+    }
+    
+    .image-placeholder {
+        height: 220px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: #6c757d;
+    }
+    
+    .price {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #28a745;
+        margin: 0;
+    }
+    
+    .rating-stars {
+        color: #ffc107;
+        font-size: 0.9rem;
+    }
+    
+    .category-badge {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border: none;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+    }
+    
+    .filter-sidebar {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+        height: fit-content;
+        position: sticky;
+        top: 20px;
+    }
+    
+    .search-box {
+        border-radius: 25px;
+        border: 2px solid #e9ecef;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+    
+    .search-box:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+        outline: none;
+    }
+    
+    .btn {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-sm {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+    }
+    
+    .btn-success {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
+    
+    .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
+    
+    .btn-outline-success {
+        border: 2px solid #28a745;
+        color: #28a745;
+        background: transparent;
+    }
+    
+    .btn-outline-success:hover {
+        background: #28a745;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .btn-outline-primary {
+        border: 2px solid #007bff;
+        color: #007bff;
+        background: transparent;
+    }
+    
+    .btn-outline-primary:hover {
+        background: #007bff;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .favorite-btn {
+        background: rgba(255, 255, 255, 0.95);
+        border: 2px solid transparent;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .favorite-btn:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: scale(1.1);
+        border-color: #dc3545;
+    }
+    
+    .favorite-btn.favorited {
+        background: rgba(220, 53, 69, 0.1);
+        border-color: #dc3545;
+    }
+    
+    .list-group-item {
+        border: none;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 4px;
+        transition: all 0.3s ease;
+    }
+    
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+        transform: translateX(4px);
+    }
+    
+    .list-group-item.active {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border: none;
+    }
+    
+    .form-control {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        padding: 10px 16px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+    }
+    
+    .form-select {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        padding: 10px 16px;
+    }
+    
+    .pagination .page-link {
+        border-radius: 8px;
+        margin: 0 2px;
+        border: 2px solid #e9ecef;
+        color: #28a745;
+        font-weight: 600;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border-color: #28a745;
+    }
+    
+    .card-title {
+        font-weight: 600;
+        line-height: 1.4;
+        margin-bottom: 12px;
+    }
+    
+    .card-text {
+        line-height: 1.6;
+        color: #6c757d;
+    }
+    
+    .card-footer {
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        padding: 12px 20px;
+    }
+    
+    .page-header {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 32px;
+    }
+    
+    .results-header {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 24px;
+    }
+    
+    /* Loading states */
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .loading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <!-- Header Section -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="h2 mb-2 fw-bold text-success">
+                    <i class="fas fa-leaf me-3"></i>
+                    Eco Products Marketplace
+                </h1>
+                <p class="text-muted mb-0 fs-5">Discover sustainable and eco-friendly products from trusted sellers</p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <a href="{% url 'products:product_create' %}" class="btn btn-success btn-lg">
+                    <i class="fas fa-plus me-2"></i>Sell Your Product
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <form method="get" class="mb-4 position-relative">
+    <div class="input-group">
+        <input type="text" name="q" id="search-box" 
+               class="form-control search-box" 
+               placeholder="Search products..." 
+               value="{{ request.GET.q }}">
+        <button class="btn btn-success" type="submit">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+    <ul id="suggestions-list" 
+        class="list-group position-absolute w-100" 
+        style="z-index: 1000; max-height: 200px; overflow-y: auto; display:none;">
+    </ul>
+    </form>
+
+
+    <div class="row">
+        <!-- Filter Sidebar -->
+        <div class="col-lg-3 mb-4">
+            <div class="filter-sidebar">
+                <h5 class="mb-4 fw-bold text-success">
+                </h5>
+                
+                <!-- Categories -->
+                <div class="mb-4">
+                    <h6 class="fw-bold mb-3 text-dark">Categories</h6>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'products:product_list' %}" 
+                           class="list-group-item list-group-item-action {% if not request.GET.category %}active{% endif %}">
+                            <i class="fas fa-th-large me-2"></i>All Categories
+                        </a>
+                        {% for category in categories %}
+                        <a href="?category={{ category.slug }}" 
+                           class="list-group-item list-group-item-action {% if request.GET.category == category.slug %}active{% endif %}">
+                            <i class="fas fa-tag me-2"></i>{{ category.name }}
+                            <span class="badge bg-secondary float-end">{{ category.products.count }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Price Range -->
+                <div class="mb-4">
+                    <h6 class="fw-bold mb-3 text-dark">Price Range</h6>
+                    <form method="get">
+                        {% for key, value in request.GET.items %}
+                            {% if key != 'min_price' and key != 'max_price' %}
+                                <input type="hidden" name="{{ key }}" value="{{ value }}">
+                            {% endif %}
+                        {% endfor %}
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <input type="number" name="min_price" class="form-control form-control-sm" 
+                                       placeholder="Min" value="{{ request.GET.min_price }}">
+                            </div>
+                            <div class="col-6">
+                                <input type="number" name="max_price" class="form-control form-control-sm" 
+                                       placeholder="Max" value="{{ request.GET.max_price }}">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-outline-success mt-3 w-100">Apply Price Filter</button>
+                    </form>
+                </div>
+
+                <!-- Clear Filters -->
+                {% if request.GET %}
+                <a href="{% url 'products:product_list' %}" class="btn btn-outline-secondary w-100">
+                    <i class="fas fa-times me-2"></i>Clear All Filters
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="col-lg-9">
+            <!-- Results Header -->
+            <div class="results-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-1 fw-bold">
+                            {% if products %}
+                                {{ products|length }} product{{ products|length|pluralize }} found
+                            {% else %}
+                                No products found
+                            {% endif %}
+                        </h5>
+                        {% if request.GET.q %}
+                            <small class="text-muted">Search results for "{{ request.GET.q }}"</small>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                        <form method="get" class="d-inline">
+                            {% for key, value in request.GET.items %}
+                                {% if key != 'sort' %}
+                                    <input type="hidden" name="{{ key }}" value="{{ value }}">
+                                {% endif %}
+                            {% endfor %}
+                            <select name="sort" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+                                <option value="">Sort by</option>
+                                <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Newest</option>
+                                <option value="price_low" {% if request.GET.sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                                <option value="price_high" {% if request.GET.sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                                <option value="rating" {% if request.GET.sort == 'rating' %}selected{% endif %}>Highest Rated</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% if products %}
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    {% for product in products %}
+                    <div class="col">
+                        <div class="card product-card h-100">
+                            <!-- Product Image -->
+                            <div class="position-relative">
+                                {% if product.images.first %}
+                                    {% if product.images.first.remote_image_url %}
+                                        <img src="{{ product.images.first.remote_image_url }}"
+                                             class="card-img-top product-image"
+                                             alt="{{ product.title }}"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="image-placeholder" style="display: none;">
+                                            <i class="fas fa-image fa-3x mb-2"></i>
+                                            <small>Image not available</small>
+                                        </div>
+                                    {% elif product.images.first.image %}
+                                        <img src="{{ product.images.first.image.url }}"
+                                             class="card-img-top product-image"
+                                             alt="{{ product.title }}"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="image-placeholder" style="display: none;">
+                                            <i class="fas fa-image fa-3x mb-2"></i>
+                                            <small>Image not available</small>
+                                        </div>
+                                    {% else %}
+                                        <div class="image-placeholder">
+                                            <i class="fas fa-image fa-3x mb-2"></i>
+                                            <small>No image</small>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="image-placeholder">
+                                        <i class="fas fa-image fa-3x mb-2"></i>
+                                        <small>No image</small>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Category Badge -->
+                                <div class="position-absolute top-0 start-0 m-3">
+                                    <span class="badge category-badge">{{ product.category.name }}</span>
+                                </div>
+                                
+                                <!-- Favorite Button -->
+                                {% if user.is_authenticated %}
+                                <div class="position-absolute top-0 end-0 m-3">
+                                    <button class="btn favorite-btn {% if product.is_favorited_by_user %}favorited{% endif %}" 
+                                            data-product-id="{{ product.pk }}"
+                                            data-favorited="{% if product.is_favorited_by_user %}true{% else %}false{% endif %}">
+                                        <i class="{% if product.is_favorited_by_user %}fas{% else %}far{% endif %} fa-heart {% if product.is_favorited_by_user %}text-danger{% endif %}"></i>
+                                    </button>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="card-body d-flex flex-column p-4">
+                                <!-- Product Title -->
+                                <h5 class="card-title">
+                                    <a href="{% url 'products:product_detail' product.pk %}" 
+                                       class="text-decoration-none text-dark">
+                                        {{ product.title }}
+                                    </a>
+                                </h5>
+
+                                <!-- Rating -->
+                                {% if product.average_rating %}
+                                <div class="mb-3">
+                                    <div class="rating-stars">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= product.average_rating %}
+                                                <i class="fas fa-star"></i>
+                                            {% elif forloop.counter <= product.average_rating|add:0.5 %}
+                                                <i class="fas fa-star-half-alt"></i>
+                                            {% else %}
+                                                <i class="far fa-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <small class="text-muted ms-2">({{ product.review_count }})</small>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <!-- Description -->
+                                <p class="card-text flex-grow-1">
+                                    {{ product.description|truncatewords:12 }}
+                                </p>
+
+                                <!-- Price and Actions -->
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="price">${{ product.price }}</div>
+                                        {% if product.is_negotiable %}
+                                            <small class="text-success">
+                                                <i class="fas fa-handshake me-1"></i>Negotiable
+                                            </small>
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <a href="{% url 'products:product_detail' product.pk %}" 
+                                           class="btn btn-outline-primary">
+                                            <i class="fas fa-eye me-2"></i>View Details
+                                        </a>
+                                        {% if user.is_authenticated and user != product.seller %}
+                                        <a href="#" class="btn btn-outline-success contact-seller-btn"
+                                           data-product-id="{{ product.pk }}">
+                                            <i class="fas fa-comment me-2"></i>Contact Seller
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card Footer -->
+                            <div class="card-footer">
+                                <small class="text-muted">
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    {{ product.location|default:"Location not specified" }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if is_paginated %}
+                <nav aria-label="Product pagination" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                    <i class="fas fa-angle-double-left"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                    <i class="fas fa-angle-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                    <i class="fas fa-angle-double-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+
+            {% else %}
+                <!-- No Products Found -->
+                <div class="text-center py-5">
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 120px; height: 120px;">
+                        <i class="fas fa-search fa-3x text-muted"></i>
+                    </div>
+                    <h4 class="text-muted mb-3">No products found</h4>
+                    <p class="text-muted mb-4">Try adjusting your search criteria or browse all categories.</p>
+                    <a href="{% url 'products:product_list' %}" class="btn btn-success btn-lg">
+                        <i class="fas fa-home me-2"></i>Browse All Products
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- CSRF Token for AJAX -->
+{% csrf_token %}
+{% endblock %}
+
+{% block extra_js %}
+<!-- Add jQuery if not already included -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    const csrftoken = getCookie('csrftoken');
+
+    // Favorite button functionality
+    $('.favorite-btn').click(function() {
+        const btn = $(this);
+        const productId = btn.data('product-id');
+        
+        if (btn.hasClass('loading')) return;
+        btn.addClass('loading').prop('disabled', true);
+        
+        $.ajax({
+            url: `/products/${productId}/toggle-favorite/`,
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrftoken },
+            success: function(response) {
+                const icon = btn.find('i');
+                if (response.status === 'success') {
+                    if (response.action === 'added') {
+                        icon.removeClass('far').addClass('fas text-danger');
+                        btn.addClass('favorited').data('favorited', 'true');
+                        showNotification('💚 Added to favorites!', 'success');
+                    } else {
+                        icon.removeClass('fas text-danger').addClass('far');
+                        btn.removeClass('favorited').data('favorited', 'false');
+                        showNotification('💔 Removed from favorites', 'info');
+                    }
+                } else {
+                    showNotification('❌ Something went wrong. Please try again.', 'danger');
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 403) {
+                    showNotification('❌ Please log in to favorite products.', 'warning');
+                } else {
+                    showNotification('❌ Something went wrong. Please try again.', 'danger');
+                }
+            },
+            complete: function() {
+                btn.removeClass('loading').prop('disabled', false);
+            }
+        });
+    });
+
+    // Contact seller button (placeholder)
+    $('.contact-seller-btn').click(function(e) {
+        e.preventDefault();
+        showNotification('💬 Messaging feature coming soon!', 'info');
+    });
+
+// 🔍 Search Autocomplete
+const searchBox = $('#search-box');
+const suggestionsList = $('#suggestions-list');
+
+searchBox.on('input', function () {
+    const query = $(this).val().trim();
+    if (query.length > 1) {
+        $.get("{% url 'products:product_autocomplete' %}", { q: query }, function (data) {
+            suggestionsList.empty();
+            if (data.suggestions.length > 0) {
+                data.suggestions.forEach(item => {
+                    const li = $('<li class="list-group-item" style="cursor:pointer;"></li>').text(item);
+
+                    // ✅ Use jQuery click event instead of vanilla addEventListener
+                    li.on('click', function () {
+                        searchBox.val($(this).text()); // set value
+                        suggestionsList.hide(); // hide suggestions
+                        searchBox.closest('form').submit(); // submit form
+                    });
+
+                    suggestionsList.append(li);
+                });
+                suggestionsList.show();
+            } else {
+                suggestionsList.hide();
+            }
+        });
+    } else {
+        suggestionsList.hide();
+    }
+});
+
+// Hide suggestions if clicked outside
+$(document).click(function (e) {
+    if (!searchBox.is(e.target) && !suggestionsList.is(e.target) && suggestionsList.has(e.target).length === 0) {
+        suggestionsList.hide();
+    }
+});
+});
+
+// Notification function
+function showNotification(message, type = 'info', duration = 4000) {
+    $('.notification').remove();
+    const notification = $(`
+        <div class="alert alert-${type} alert-dismissible fade show position-fixed notification" 
+             style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `);
+    $('body').append(notification);
+    setTimeout(() => notification.fadeOut(() => notification.remove()), duration);
+}
+</script>
+{% endblock %}

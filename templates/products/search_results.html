@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ page_title }}</h2>
+{% include 'partials/search_form.html' %}
+<div class="row">
+  {% for product in products %}
+    <div class="col-md-4 mb-4">
+      {% include 'partials/product_card.html' with product=product %}
+    </div>
+  {% empty %}
+    <div class="col-12">No products found matching your search.</div>
+  {% endfor %}
+</div>
+{% include 'partials/pagination.html' %}
+{% endblock %}

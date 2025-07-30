@@ -1,0 +1,647 @@
+/* ==========================================
+   Eco-Friendly Marketplace - Base Styles
+   ========================================== */
+
+/* CSS Variables for Eco-Friendly Color Scheme */
+:root {
+    --primary-green: #28a745;
+    --secondary-green: #20c997;
+    --light-green: #d4edda;
+    --dark-green: #155724;
+    --eco-brown: #8b4513;
+    --earth-yellow: #ffc107;
+    --sky-blue: #17a2b8;
+    --natural-gray: #6c757d;
+    --clean-white: #ffffff;
+    --soft-background: #f8f9fa;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --border-radius: 8px;
+    /* --transition-smooth: all 0.3s ease; */
+}
+
+/* Comment out all transitions and transforms globally */
+:root {
+    /* --transition-smooth: all 0.3s ease; */
+}
+
+/* Global Styles */
+* {
+    box-sizing: border-box;
+    /* transition: none !important; */
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: var(--soft-background);
+}
+
+/* Custom Bootstrap Overrides */
+.btn-success {
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+    /* transition: none !important; */
+}
+
+.btn-success:hover {
+    background-color: var(--dark-green);
+    border-color: var(--dark-green);
+    /* transform: translateY(-2px); */
+    /* transition: none !important; */
+}
+
+.bg-success {
+    background-color: var(--primary-green) !important;
+}
+
+.text-success {
+    color: var(--primary-green) !important;
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+}
+
+/* Navigation Styles */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    /* transition: none !important; */
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--earth-yellow) !important;
+    /* transform: translateY(-1px); */
+}
+
+.navbar .dropdown-menu {
+    border: none;
+    box-shadow: 0 10px 30px var(--shadow-medium);
+    border-radius: var(--border-radius);
+}
+
+.navbar .dropdown-item {
+    padding: 0.75rem 1.5rem;
+    /* transition: none !important; */
+}
+
+.navbar .dropdown-item:hover {
+    background-color: var(--light-green);
+    color: var(--dark-green);
+    /* padding-left: 2rem; */
+}
+
+/* Search Bar Styles */
+.navbar .form-control {
+    border-radius: 25px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.9);
+    position: relative;
+}
+
+.navbar .form-control:focus {
+    border-color: var(--earth-yellow);
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+}
+
+/* Completely remove all browser search and validation icons */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+    -webkit-appearance: none !important;
+    display: none !important;
+}
+
+input[type="text"]::-webkit-search-decoration,
+input[type="text"]::-webkit-search-cancel-button,
+input[type="text"]::-webkit-search-results-button,
+input[type="text"]::-webkit-search-results-decoration {
+    -webkit-appearance: none !important;
+    display: none !important;
+}
+
+/* Remove validation icons */
+input::-webkit-validation-bubble,
+input::-webkit-validation-bubble-message,
+input::-webkit-validation-bubble-arrow,
+input::-webkit-validation-bubble-arrow-clipper {
+    display: none !important;
+}
+
+input[type="search"],
+input[type="text"] {
+    -webkit-appearance: none !important;
+    -moz-appearance: textfield !important;
+    background-image: none !important;
+}
+
+/* Force remove any background images or icons */
+.navbar .form-control {
+    background-image: none !important;
+    background-repeat: no-repeat;
+    background-position: right center;
+    padding-right: 15px !important;
+}
+
+/* Hide any browser autocomplete icons */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: none !important;
+    background-image: none !important;
+}
+
+/* Card Styles */
+.card {
+    border: none;
+    border-radius: var(--border-radius);
+    /* transition: none !important; */
+    overflow: hidden;
+}
+
+.card:hover {
+    /* Only apply hover effect if the card itself is hovered, not when a child input/textarea is focused */
+    /* transform: translateY(-5px); */
+    /* box-shadow: 0 15px 35px var(--shadow-medium); */
+}
+
+.card:focus-within {
+    /* Remove hover/focus effect when a form field inside is focused */
+    /* transform: none !important; */
+    /* box-shadow: none !important; */
+}
+
+.card-title {
+    color: var(--dark-green);
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 25px;
+    font-weight: 600;
+    /* transition: none !important; */
+    border: 2px solid transparent;
+}
+
+.btn:hover {
+    /* transform: translateY(-2px); */
+}
+
+.btn-outline-success {
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+}
+
+.btn-outline-success:hover {
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+    color: white;
+}
+
+/* Alert Styles */
+.alert {
+    border: none;
+    border-radius: var(--border-radius);
+    border-left: 4px solid;
+}
+
+.alert-success {
+    background-color: var(--light-green);
+    border-left-color: var(--primary-green);
+    color: var(--dark-green);
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border-left-color: var(--sky-blue);
+    color: #0c5460;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-left-color: var(--earth-yellow);
+    color: #856404;
+}
+
+/* Form Styles */
+.form-control {
+    border-radius: var(--border-radius);
+    border: 2px solid #e9ecef;
+    /* transition: none !important; */
+}
+
+.form-control:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-green);
+    margin-bottom: 0.75rem;
+}
+
+/* Badge Styles */
+.badge {
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    border-radius: 15px;
+}
+
+/* Footer Styles */
+footer {
+    margin-top: auto;
+}
+
+footer a {
+    transition: var(--transition-smooth);
+}
+
+footer a:hover {
+    color: var(--earth-yellow) !important;
+    text-decoration: none;
+}
+
+footer .btn:hover {
+    transform: scale(1.05);
+}
+
+/* Utility Classes */
+.shadow-eco {
+    /* box-shadow: 0 4px 6px var(--shadow-light); */
+}
+
+.shadow-eco-lg {
+    /* box-shadow: 0 10px 25px var(--shadow-medium); */
+}
+
+.text-eco-primary {
+    color: var(--primary-green) !important;
+}
+
+.text-eco-secondary {
+    color: var(--secondary-green) !important;
+}
+
+.bg-eco-light {
+    background-color: var(--light-green) !important;
+}
+
+.border-eco {
+    border: 2px solid var(--primary-green) !important;
+}
+
+.rounded-eco {
+    border-radius: var(--border-radius) !important;
+}
+
+/* Animation Classes */
+.fade-in {
+    /* animation: fadeIn 0.6s ease-in; */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        /* transform: translateY(20px); */
+    }
+    to {
+        opacity: 1;
+        /* transform: translateY(0); */
+    }
+}
+
+.slide-in-left {
+    /* animation: slideInLeft 0.8s ease-out; */
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        /* transform: translateX(-50px); */
+    }
+    to {
+        opacity: 1;
+        /* transform: translateX(0); */
+    }
+}
+
+.slide-in-right {
+    /* animation: slideInRight 0.8s ease-out; */
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        /* transform: translateX(50px); */
+    }
+    to {
+        opacity: 1;
+        /* transform: translateX(0); */
+    }
+}
+
+/* Loading Spinner */
+.spinner-eco {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid var(--light-green);
+    border-top: 3px solid var(--primary-green);
+    border-radius: 50%;
+    /* animation: spin 1s linear infinite; */
+}
+
+@keyframes spin {
+    0% { /* transform: rotate(0deg); */ }
+    100% { /* transform: rotate(360deg); */ }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .display-4 {
+        font-size: 2rem;
+    }
+
+    .lead {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--soft-background);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-green);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-green);
+}
+
+/* Focus Styles for Accessibility */
+.btn:focus,
+.form-control:focus,
+.nav-link:focus {
+    outline: 2px solid var(--earth-yellow);
+    outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    footer,
+    .btn {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+    }
+}
+
+/* Dark Mode Support (Future Enhancement) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --soft-background: #1a1a1a;
+        --clean-white: #2d2d2d;
+        --shadow-light: rgba(255, 255, 255, 0.1);
+        --shadow-medium: rgba(255, 255, 255, 0.15);
+    }
+}
+
+/* Eco-specific styles */
+.eco-badge {
+    background: linear-gradient(45deg, var(--primary-green), var(--secondary-green));
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.impact-counter {
+    background: linear-gradient(135deg, var(--secondary-green), var(--primary-green));
+    color: white;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.category-icon {
+    transition: var(--transition-smooth);
+}
+
+.category-card:hover .category-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+
+/* ==========================================
+   DROPDOWN FIXES - Add this to the end of your base.css file
+   ========================================== */
+
+/* Override Bootstrap dropdown defaults to ensure they work */
+.navbar-nav .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    z-index: 1050 !important;
+    display: none !important;
+    float: left !important;
+    min-width: 10rem !important;
+    padding: 0.5rem 0 !important;
+    margin: 0.125rem 0 0 !important;
+    font-size: 0.875rem !important;
+    color: #212529 !important;
+    text-align: left !important;
+    list-style: none !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid rgba(0,0,0,.15) !important;
+    border-radius: 0.375rem !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Show dropdown when Bootstrap adds the 'show' class */
+.navbar-nav .dropdown-menu.show {
+    display: block !important;
+}
+
+/* Dropdown items styling */
+.navbar-nav .dropdown-item {
+    display: block !important;
+    width: 100% !important;
+    padding: 0.5rem 1rem !important;
+    clear: both !important;
+    font-weight: 400 !important;
+    color: #212529 !important;
+    text-align: inherit !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    background-color: transparent !important;
+    border: 0 !important;
+}
+
+/* Dropdown item hover effect */
+.navbar-nav .dropdown-item:hover,
+.navbar-nav .dropdown-item:focus {
+    color: #1e2125 !important;
+    background-color: #e9ecef !important;
+}
+
+/* Dropdown item active state */
+.navbar-nav .dropdown-item.active,
+.navbar-nav .dropdown-item:active {
+    color: #fff !important;
+    text-decoration: none !important;
+    background-color: #0d6efd !important;
+}
+
+/* Dropdown item disabled state */
+.navbar-nav .dropdown-item.disabled,
+.navbar-nav .dropdown-item:disabled {
+    color: #adb5bd !important;
+    pointer-events: none !important;
+    background-color: transparent !important;
+}
+
+/* Dropdown divider */
+.navbar-nav .dropdown-divider {
+    height: 0 !important;
+    margin: 0.5rem 0 !important;
+    overflow: hidden !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Ensure dropdowns appear above other content */
+.navbar {
+    z-index: 1030 !important;
+}
+
+.dropdown-menu {
+    z-index: 1050 !important;
+}
+
+/* Fix positioning for right-aligned dropdowns */
+.navbar-nav .dropdown-menu-end {
+    right: 0 !important;
+    left: auto !important;
+}
+
+/* Mobile dropdown adjustments */
+@media (max-width: 991.98px) {
+    .navbar-nav .dropdown-menu {
+        position: static !important;
+        float: none !important;
+        width: auto !important;
+        margin-top: 0 !important;
+        background-color: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+    }
+    
+    .navbar-nav .dropdown-item {
+        padding: 0.5rem 1.5rem !important;
+    }
+}
+
+/* Specific fixes for your navbar structure */
+#categoriesDropdown + .dropdown-menu,
+#userDropdown + .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    z-index: 1050 !important;
+    display: none !important;
+}
+
+#categoriesDropdown + .dropdown-menu.show,
+#userDropdown + .dropdown-menu.show {
+    display: block !important;
+}
+
+/* Prevent interference from your base styles */
+.navbar-nav .dropdown-toggle,
+.navbar-nav .dropdown-item {
+    transition: background-color 0.15s ease-in-out !important;
+}
+
+/* Fix any overflow issues */
+.navbar-collapse {
+    overflow: visible !important;
+}
+
+.container-fluid {
+    overflow: visible !important;
+}
+
+/* Ensure dropdown icons work */
+.dropdown-toggle::after {
+    display: inline-block !important;
+    margin-left: 0.255em !important;
+    vertical-align: 0.255em !important;
+    content: "" !important;
+    border-top: 0.3em solid !important;
+    border-right: 0.3em solid transparent !important;
+    border-bottom: 0 !important;
+    border-left: 0.3em solid transparent !important;
+}
+
+.dropdown-toggle:empty::after {
+    margin-left: 0 !important;
+}
+
+/* Force proper Bootstrap dropdown behavior */
+.navbar-nav .dropdown.show .dropdown-menu {
+    display: block !important;
+}
+
+.navbar-nav .dropdown:hover .dropdown-menu {
+    display: block !important;
+}
+
+/* Fix badge positioning in dropdowns */
+.navbar-nav .dropdown-item .badge {
+    float: right !important;
+    margin-top: 2px !important;
+}
